@@ -1,0 +1,50 @@
+body {
+  font-size: 100%;
+  font-family: 'Arial';
+}
+h1 {
+  border: 1px solid #4297d7;
+  border-radius: 10px;
+  background: #2191c0;
+  padding-left: 0.5em;
+  margin: 0.5em;
+  color: #fff;
+  font-size: 1.1em;
+}
+ul {
+  list-style-type: none;
+/*width:15em;*/
+}
+ul li {
+  border: 1px solid #00f;
+  margin: 0.2em;
+  border-radius: 5em;
+  text-align: center;
+  padding: 0.2em 0.2em;
+}
+ul li.localParticipant {
+  font-weight: bold;
+  font-style: italic;
+}
+ul li:hover,
+ul li:focus,
+ul li:active {
+  opacity: 0.5;
+}
+#listenerList li {
+  background: #f00;
+}
+#waitingList li {
+  background: #ffa500;
+}
+#speakerList li {
+  background: #008000;
+}
+input[type='button'] {
+  background: LightBlue;
+  border: 1px solid #00f;
+  margin: 0.2em;
+  border-radius: 7px;
+  text-align: center;
+  padding: 0.2em 4em;
+}

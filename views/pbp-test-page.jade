@@ -1,0 +1,17 @@
+extends pbp-base-page
+
+block append scripts
+  script(src='#{url}/../javascripts/test/fake-hangout.js')
+  script(src='#{url}/../javascripts//park-bench-panel.js')
+  script(src='#{url}/../javascripts/test/park-bench-panel-init.js')
+
+block append body
+  hr
+  div
+    label(for='localParticipantSelect') Current local participant
+    select#localParticipantSelect(onchange='gapi.hangout.participantSelectChanged();')
+    input#btnRemoveParticipant.button(type='button', value='Remove current participant', onclick='gapi.hangout.removeTestParticipant()')
+  div
+    label(for='displayName') Name
+    input#displayName.text(type='text')
+    input#btnAddParticipant.button(type='button', value='Add new participant', onclick='gapi.hangout.addTestParticipant()')
