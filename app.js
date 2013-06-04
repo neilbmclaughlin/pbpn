@@ -29,7 +29,7 @@ if ('development' == app.get('env')) {
 }
 
 function getBaseUrl(req) {
-  var protocol = req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] === "http" ? 'https' : 'http';
+  var protocol = ( 'development' == app.get('env') ? 'http' : 'https' );
   return protocol + "://" + req.get('host') + req.url;
 }
 
