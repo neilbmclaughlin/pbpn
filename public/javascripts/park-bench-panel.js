@@ -101,16 +101,6 @@ var hangoutWrapper = function(gapi) {
     };
   };
 
-  var setup = function(participantsJoinedHandler, participantsLeftHandler, statusChangedHandler, init) {
-    var googleLocalParticipant = gapi.hangout.getLocalParticipant();
-    mapper = participantMapper(that, googleLocalParticipant.person.id);
-    localParticipant = mapper(googleLocalParticipant);
-    gapi.hangout.onParticipantsAdded.add(getWrappedHandler(participantsJoinedHandler, mapper, 'addedParticipants'));
-    gapi.hangout.onParticipantsRemoved.add(getWrappedHandler(participantsLeftHandler, mapper, 'removedParticipants'));
-    gapi.hangout.data.onStateChanged.add(statusChangedHandler);
-    init();
-  };
-
   that.start = function(participantsAddedHandler, participantsLeftHandler, statusChangedHandler, init) {
     if (gapi.hangout.isApiReady()) {
       setup(participantsAddedHandler, participantsLeftHandler, statusChangedHandler, init);
@@ -126,7 +116,10 @@ var hangoutWrapper = function(gapi) {
     return $.map(gapi.hangout.getParticipants(), mapper);
   };
   that.getLocalParticipant = function() {
-    return localParticipant;
+    //Needed to do this to make dummy pbp work - would prefer to just do it on load.
+    var googleLocalParticipant = gapi.hangout.getLocalParticipant();
+    mapper = participantMapper(that, googleLocalParticipant.person.id);
+    return mapper(googleLocalParticipant);
   };
   that.setStatus = function(participantId, status) {
     gapi.hangout.data.setValue(participantId, status);
@@ -136,6 +129,14 @@ var hangoutWrapper = function(gapi) {
   };
   that.clearStatus = function(participantId) {
     return gapi.hangout.data.clearValue(participantId);
+  };
+
+  var setup = function(participantsJoinedHandler, participantsLeftHandler, statusChangedHandler, init) {
+    localParticipant = that.getLocalParticipant();
+    gapi.hangout.onParticipantsAdded.add(getWrappedHandler(participantsJoinedHandler, mapper, 'addedParticipants'));
+    gapi.hangout.onParticipantsRemoved.add(getWrappedHandler(participantsLeftHandler, mapper, 'removedParticipants'));
+    gapi.hangout.data.onStateChanged.add(statusChangedHandler);
+    init();
   };
 
   return that;

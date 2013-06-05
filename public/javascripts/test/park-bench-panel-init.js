@@ -1,4 +1,3 @@
-
 var hangout = hangoutWrapper(gapi);
 var renderer = testingRenderer();
 var pbp = parkBenchPanel(hangout, renderer);

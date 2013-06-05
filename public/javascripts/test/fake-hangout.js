@@ -1,3 +1,5 @@
+var fakeLocalParticipant;
+
 var getFakeHangout = function() {
 
   var stateList = {
@@ -5,7 +7,7 @@ var getFakeHangout = function() {
     2 : 'listener',
     3 : 'listener',
     4 : 'listener',
-    5 : 'listener',
+    5 : 'listener'
   };
 
   var getParticipants = function() {
@@ -13,35 +15,35 @@ var getFakeHangout = function() {
       {
         person: {
           id: '1',
-          displayName: 'Bob',
-        },
+          displayName: 'Bob'
+        }
       }, {
         person: {
           id: '2',
-          displayName: 'Fred',
-        },
+          displayName: 'Fred'
+        }
       }, {
         person: {
           id: '3',
-          displayName: 'Bill',
-        },
+          displayName: 'Bill'
+        }
       }, {
         person: {
           id: '4',
-          displayName: 'Joe',
-        },
+          displayName: 'Joe'
+        }
       }, {
         person: {
           id: '5',
-          displayName: 'Alf',
-        },
+          displayName: 'Alf'
+        }
       }
     ];
   };
   var participantAddedEventHandlerSpy, participantRemovedEventHandlerSpy, stateChangedHandlerSpy;
   var participants;
 
-  var localParticipant = getParticipants()[0];
+  fakeLocalParticipant = getParticipants()[0];
 
   return {
     isApiReady: function() { return true; },
@@ -73,16 +75,16 @@ var getFakeHangout = function() {
       },
       clearValue: function(key) {
         stateList[key] = undefined;
-      },
+      }
     },
     getLocalParticipant : function() {
       // var localParticipant = jQuery.grep(participants, function(p){
       //     return (p.person.displayName == $('#localParticipantSelect').val() );
       // })[0];
-      return localParticipant;
+      return fakeLocalParticipant;
     },
     participantSelectChanged : function() {
-      localParticipant = jQuery.grep(participants, function(p){
+      fakeLocalParticipant = jQuery.grep(participants, function(p){
         return (p.person.id == $('#localParticipantSelect').val() );
       })[0];
     },
@@ -91,19 +93,19 @@ var getFakeHangout = function() {
       var p = {
         person: {
           id : id,
-          displayName : $('#displayName').val(),
-        },
+          displayName : $('#displayName').val()
+        }
       };
       participants.push(p);
       participantAddedEventHandlerSpy( { addedParticipants : [p] });
     },
     removeTestParticipant : function() {
-      participantRemovedEventHandlerSpy( { removedParticipants : [localParticipant] });
+      participantRemovedEventHandlerSpy( { removedParticipants : [fakeLocalParticipant] });
       participants = jQuery.grep(participants, function(p){
-        return (p.person.id != localParticipant.id );
+        return (p.person.id != fakeLocalParticipant.id );
       });
-      localParticipant = participants[0];
-    },
+      fakeLocalParticipant = participants[0];
+    }
   };
 };
 
@@ -142,35 +144,5 @@ var testingRenderer = function() {
 
   return that;
 };
-
-var testingCanvasRenderer = function() {
-
-  var that = canvasRenderer();
-
-  var super_add = that.add;
-  var super_remove = that.remove;
-
-  that.add = function(name, status) {
-    super_add(name, status);
-    $('#localParticipantSelect').append('<option>' + name + '</option>');
-  };
-
-  that.remove = function(name, status) {
-    super_remove(name, status);
-    $("#localParticipantSelect option[value='" + name + "']").remove();
-  };
-
-  that.move = function(name, oldStatus, newStatus) {
-    that.remove(name, oldStatus);
-    that.add(name, newStatus);
-  };
-
-  that.statusChangedEventHandler = function(spec) {
-    that.move(spec.name, spec.lastStatus, spec.currentStatus);
-  };
-
-  return that;
-};
-
 
 gapi = { hangout : getFakeHangout() };
