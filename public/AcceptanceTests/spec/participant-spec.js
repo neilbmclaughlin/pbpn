@@ -18,11 +18,11 @@ describe("A participant", function() {
         expect(p1.getStatus()).toEqual('speaker');
         expect(statusChangedHandler1).toHaveBeenCalledWith({
             participant: p1,
-            lastStatus: 'listener',
+            lastStatus: 'listener'
         });
         expect(statusChangedHandler2).toHaveBeenCalledWith({
             participant: p1,
-            lastStatus: 'listener',
+            lastStatus: 'listener'
         });
     });
 

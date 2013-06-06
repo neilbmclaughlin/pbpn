@@ -4,8 +4,7 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
+  , pbp = require('./routes/pbp')
   , http = require('http')
   , path = require('path');
 
@@ -28,23 +27,8 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-function getBaseUrl(req) {
-  var protocol = ( 'development' == app.get('env') ? 'http' : 'https' );
-  return protocol + "://" + req.get('host') + req.url;
-}
-
-app.get('/', routes.index);
-app.get('/users', user.list);
-
-app.get('/pbp', function(req,res,next){
-   res.header('Content-Type', 'application/xml');
-   return res.render('pbp-xml', {url : getBaseUrl(req) });
-});
-
-app.get('/dummy-pbp', function(req,res,next){
-  return res.render('pbp-test-page', {url : getBaseUrl(req) });
-});
-
+app.get('/pbp', pbp.pbp);
+app.get('/dummy-pbp', pbp.dummyPbp);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

@@ -1,6 +1,6 @@
 doctype 5
 head
-  title Park Bench Panel X
+  title Park Bench Panel
 
   link(rel='stylesheet', type='text/css', href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/themes/start/jquery-ui.css')
   link(rel='stylesheet', type='text/css', href='#{url}/../stylesheets/park-bench-panel.css')
@@ -11,16 +11,16 @@ head
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js')
     script(src='//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js')
 
-  block body
-    body
-      div(width='75%')
-        h1 Park Bench Panel
-        h1 Listeners
-          ul#listenerList
-        h1 Waiting to speak
-          ul#waitingList
-        h1 Speakers (Limit : 3)
-          ul#speakerList
-        #buttons
-          input#btnStartTalk.button(type='button', value='I want to talk', onclick='startTalk()')
-          input#btnStopTalk.button(type='button', value='Done talking', onclick='stopTalk()')
+block body
+  body
+    div(width='75%')
+      h1 Park Bench Panel
+      h1 Listeners
+        ul#listenerList
+      h1 Waiting to speak
+        ul#waitingList
+      h1 Speakers (Limit : 3)
+        ul#speakerList
+      #buttons
+        input#btnStartTalk.button(type='button', value='I want to talk', onclick='startTalk()')
+        input#btnStopTalk.button(type='button', value='Done talking', onclick='stopTalk()')

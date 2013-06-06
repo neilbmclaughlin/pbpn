@@ -84,7 +84,7 @@ var participantMapper = function(hangoutWrapper, localParticipantId) {
       name: googleParticipant.person.displayName,
       status: hangoutWrapper.getStatus(googleParticipant.person.id),
       local: googleParticipant.person.id == localParticipantId,
-      statusChangedEventHandlers: [ repositoryUpdatehandler ],
+      statusChangedEventHandlers: [ repositoryUpdatehandler ]
     });
   };
 };
@@ -112,7 +112,7 @@ var hangoutWrapper = function(gapi) {
       gapi.hangout.onApiReady.add(f);
     }
   };
-  that.getParticipants = function(statusChangedEventHandlers) {
+  that.getParticipants = function() {
     return $.map(gapi.hangout.getParticipants(), mapper);
   };
   that.getLocalParticipant = function() {
@@ -172,58 +172,7 @@ var renderer = function() {
     move: move,
     statusChangedEventHandler: function(spec) {
       move(spec.participant, spec.lastStatus);
-    },
-  };
-};
-
-var canvasRenderer = function() {
-
-  var getCircleName = function(status) {
-    return '#' + status + 'Circle';
-  };
-
-  var add = function(name, status) {
-    var listeningGroup = canvas.getObjects()[0];
-    var position = (listeningGroup.getObjects().length + 1) * 30;
-    var text = new fabric.Text(name, {
-      top: position,
-      fontSize: 20,
-      fontFamily: 'Courier New',
-      textAlign: 'right'
-    });
-    var rect = new fabric.Rect({
-      top: position,
-      fill: 'red',
-      width: 200,
-      height: 20,
-      rx: 10,
-      strokeWidth: 2,
-      stroke: 'blue'
-      //ry: 20
-    });
-    var participantGroup = new fabric.Group([rect, text], {left: 150});
-
-    listeningGroup.add(participantGroup);
-    canvas.renderAll();
-  };
-
-  var remove = function(name, status) {
-    var circleName = getCircleName(status);
-    //$(listName + ' li:contains("' + name + '")').remove();
-  };
-
-  var move = function(name, oldStatus, newStatus) {
-    remove(name, oldStatus);
-    add(name, newStatus);
-  };
-
-  return {
-    add: add,
-    remove: remove,
-    move: move,
-    statusChangedEventHandler: function(spec) {
-      move(spec.name, spec.lastStatus, spec.currentStatus);
-    },
+    }
   };
 };
 
@@ -246,31 +195,25 @@ var parkBenchPanel = function(repo, renderer) {
   };
 
   var getParticipantByName = function(name) {
-    return $.grep(participants, function(p, i) {
+    return $.grep(participants, function(p) {
       return p.getName() == name;
     })[0];
   };
 
   var getParticipantById = function(id) {
-    return $.grep(participants, function(p, i) {
+    return $.grep(participants, function(p) {
       return p.getId() == id;
     })[0];
   };
 
   var getParticipantsByStatus = function(status) {
-    return $.grep(participants, function(p, i) {
+    return $.grep(participants, function(p) {
       return p.getStatus() == status;
     });
   };
 
-  var setParticipantsStatus = function(participants, status) {
-    $.each(participants, function(i, p) {
-      p.setStatus(status);
-    });
-  };
-
   var getRemoteParticipants = function() {
-    return $.grep(participants, function(p, i) {
+    return $.grep(participants, function(p) {
       return p.isLocal() === false;
     });
   };

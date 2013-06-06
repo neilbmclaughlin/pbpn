@@ -2,12 +2,6 @@ describe("A Park Bench Panel", function() {
 
     var fakeRenderer, fakeHangout, pbp;
 
-    var getAddValidator = function(name, status) {
-        return function(c, i) {
-            return c.args[0] == name && c.args[1] == status;
-        };
-    };
-
     beforeEach(function() {
 
         fakeHangout = jasmine.createSpyObj('repo', ['statusChangedEventHandler', 'getLocalParticipant', 'getParticipants', 'getStatus', 'setStatus', 'clearStatus']);
@@ -98,7 +92,7 @@ describe("A Park Bench Panel", function() {
                 expect(fakeRenderer.statusChangedEventHandler.callCount).toEqual(1);
                 expect(fakeRenderer.statusChangedEventHandler).toHaveBeenCalledWith({
                     participant: participants[localParticipantId - 1],
-                    lastStatus: 'listener',
+                    lastStatus: 'listener'
                 });
             });
         });
@@ -136,7 +130,7 @@ describe("A Park Bench Panel", function() {
                 expect(fakeRenderer.statusChangedEventHandler.callCount).toEqual(1);
                 expect(fakeRenderer.statusChangedEventHandler).toHaveBeenCalledWith({
                     participant: participants[localParticipantId - 1],
-                    lastStatus: 'listener',
+                    lastStatus: 'listener'
                 });
             });
         });

@@ -1,7 +1,7 @@
 describe("A hangout wrapper", function() {
 
     var 
-        hangout,
+        wrapper,
         fakeGoogleHangout,
         newParticipantsJoinedHandler,
         stateChangedHandler,
@@ -38,13 +38,13 @@ describe("A hangout wrapper", function() {
             data: {
                 onStateChanged : { add : jasmine.createSpy('onStateChanged') },
                 setValue:  jasmine.createSpy('setValue'),
-                getValue : jasmine.createSpy('getValue').andReturn('listener'),
+                getValue : jasmine.createSpy('getValue').andReturn('listener')
 
             },
-            getLocalParticipant : jasmine.createSpy('getLocalParticipant').andReturn(googleParticipants[0]),
+            getLocalParticipant : jasmine.createSpy('getLocalParticipant').andReturn(googleParticipants[0])
         };
         
-        hangout = hangoutWrapper({ hangout: fakeGoogleHangout });
+        wrapper = hangoutWrapper({ hangout: fakeGoogleHangout });
     });
 
     describe("when participants join", function() {
@@ -53,7 +53,7 @@ describe("A hangout wrapper", function() {
             
             //Arrange
             fakeGoogleHangout.onParticipantsAdded.add = function(f) { participantsAddedHandlerSpy = f; };
-            hangout.start(participantsJoinedHandler, participantsLeftHandler, statusChangedHandler, init);
+            wrapper.start(participantsJoinedHandler, participantsLeftHandler, statusChangedHandler, init);
 
             //Act
             participantsAddedHandlerSpy({ addedParticipants : googleParticipants });
@@ -72,7 +72,7 @@ describe("A hangout wrapper", function() {
             
             //Arrange
             fakeGoogleHangout.onParticipantsRemoved.add = function(f) { participantsRemovedHandlerSpy = f; };
-            hangout.start(participantsJoinedHandler, participantsLeftHandler, statusChangedHandler, init);
+            wrapper.start(participantsJoinedHandler, participantsLeftHandler, statusChangedHandler, init);
             
             //Act
             participantsRemovedHandlerSpy({ removedParticipants : googleParticipants });
@@ -90,7 +90,7 @@ describe("A hangout wrapper", function() {
         beforeEach(function() {
             //Arrange
             fakeGoogleHangout.data.onStateChanged.add = function(f) { statusChangedHandlerSpy = f; };
-            hangout.start(participantsJoinedHandler, participantsLeftHandler, statusChangedHandler, init);
+            wrapper.start(participantsJoinedHandler, participantsLeftHandler, statusChangedHandler, init);
     
             //Act
             statusChangedHandlerSpy([ { '2' : 'speaker' } ]); //This is a fake - not sure of the value of these tests            
@@ -109,28 +109,58 @@ describe("A hangout wrapper", function() {
         
     });
 
+  describe("when a participant requests to speak", function() {
+
+    var speakerQueueChangedHandler = jasmine.createSpy('speakerQueueChangedHandler');
+    var speakerQueueChangedHandlerSpy;
+
+
+    beforeEach(function() {
+      //Arrange
+      speakerQueueChangedHandler.reset();
+      fakeGoogleHangout.data.onStateChanged.add = function(f) { speakerQueueChangedHandlerSpy = f; };
+      wrapper.start(participantsJoinedHandler, participantsLeftHandler, speakerQueueChangedHandler, init);
+
+      //Act
+      speakerQueueChangedHandlerSpy([ { '2' : 'RequestToSpeak' } ]); //This is a fake - not sure of the value of these tests
+    });
+
+    it("then subscribers should be notified", function() {
+      expect(speakerQueueChangedHandler.callCount).toEqual(1);
+      expect(speakerQueueChangedHandler.calls[0].args[0]).toEqual([ { 2 : 'RequestToSpeak' }]);
+
+    });
+
+    it("then the repository should not be called", function() {
+      expect(speakerQueueChangedHandler.callCount).toEqual(1);
+      expect(fakeGoogleHangout.data.setValue).not.toHaveBeenCalled();
+    });
+
+  });
+
+
     describe("when a hangout starts", function() {
         
-        describe("if the gapi is ready", function() {
+        describe("if the gapi is ready", function () {
 
-            beforeEach(function() {
-                hangout.start(participantsJoinedHandler, participantsLeftHandler, statusChangedHandler, init);
-            });
-            
-            it("then the event handler for handling new participants should be wired in", function() {
-                expect(fakeGoogleHangout.onParticipantsAdded.add).toHaveBeenCalled();
-            }); 
-            it("then the event handler for handling participants leaving should be wired in", function() {
-                expect(fakeGoogleHangout.onParticipantsRemoved.add).toHaveBeenCalled();
-            }); 
-            it("then the event handler for handling changes to participant state should be wired in", function() {
-                expect(fakeGoogleHangout.data.onStateChanged.add).toHaveBeenCalled()       
-            }); 
-            it("then the initialiser has been called", function() {
-                expect(init).toHaveBeenCalled();    
-            }); 
-            
-        })
+          beforeEach(function () {
+            wrapper.start(participantsJoinedHandler, participantsLeftHandler, statusChangedHandler, init);
+          });
+
+          it("then the event handler for handling new participants should be wired in", function () {
+            expect(fakeGoogleHangout.onParticipantsAdded.add).toHaveBeenCalled();
+          });
+          it("then the event handler for handling participants leaving should be wired in", function () {
+            expect(fakeGoogleHangout.onParticipantsRemoved.add).toHaveBeenCalled();
+          });
+          it("then the event handler for handling changes to participant state should be wired in", function () {
+            expect(fakeGoogleHangout.data.onStateChanged.add).toHaveBeenCalled()
+          });
+          it("then the initialiser has been called", function () {
+            expect(init).toHaveBeenCalled();
+          });
+
+        });
 
         describe("if the gapi is not ready", function() {
 
@@ -139,10 +169,10 @@ describe("A hangout wrapper", function() {
                 fakeGoogleHangout = {
                     isApiReady : jasmine.createSpy('isApiReady').andReturn(false),
                     onApiReady : { add : jasmine.createSpy('onApiReady.add') } ,                
-                    getLocalParticipant : jasmine.createSpy('getLocalParticipant').andReturn(googleParticipants[0]),
+                    getLocalParticipant : jasmine.createSpy('getLocalParticipant').andReturn(googleParticipants[0])
                 };
-                hangout = hangoutWrapper({ hangout : fakeGoogleHangout });
-                hangout.start(newParticipantsJoinedHandler, stateChangedHandler, init);
+                wrapper = hangoutWrapper({ hangout : fakeGoogleHangout });
+                wrapper.start(newParticipantsJoinedHandler, stateChangedHandler, init);
             });
             it("then the setup should wait until it is ready", function() {
                 expect(fakeGoogleHangout.onApiReady.add).toHaveBeenCalled();       
