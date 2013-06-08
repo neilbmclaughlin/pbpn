@@ -1,9 +1,16 @@
+$ = require('jquery');;
+
+helper = require('./park-bench-panel-helper.js');
+participant = require('../../javascripts/park-bench-panel.js').participant;
+participantMapper = require('../../javascripts/park-bench-panel.js').participantMapper;
+
+
 describe("A participant mapper", function() {
     
     var googleParticipants, fakeHangout;
     
     beforeEach(function() {
-        googleParticipants = getGoogleParticipants('Bob,Fred');
+        googleParticipants = helper.getGoogleParticipants('Bob,Fred');
         fakeHangout = {
             setStatus:  jasmine.createSpy('setStatus'),
             getStatus:  jasmine.createSpy('getStatus').andReturn('listener'),

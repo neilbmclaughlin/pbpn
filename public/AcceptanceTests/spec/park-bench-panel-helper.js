@@ -1,7 +1,7 @@
-var getPbpParticipants = function(spec) {
+this.getPbpParticipants = function(spec) {
     
     var googleParticipants = getGoogleParticipants(spec.namelist);
-    var mapper = participantMapper(spec.fakeRepository, spec.localParticipantId);
+    var mapper = participantMapper(spec.fakeHangoutWrapper, spec.localParticipantId);
 
     var pList = $.map(googleParticipants, mapper);
                         
@@ -11,13 +11,13 @@ var getPbpParticipants = function(spec) {
         }
     });
     pList[spec.localParticipantId - 1].setStatus(spec.localParticipantStatus);
-    spec.fakeRepository.setStatus.reset();
-    spec.fakeRepository.getStatus.reset();
+    spec.fakeHangoutWrapper.requestSpeakingPlace.reset();
+    spec.fakeHangoutWrapper.relinquishSpeakingPlace.reset();
     
     return pList;
 };
 
-var getGoogleParticipants = function(nameList) {
+this.getGoogleParticipants = function(nameList) {
     return $.map(
         nameList.split(','),
         function(n, i) { return { 

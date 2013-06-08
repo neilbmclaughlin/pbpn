@@ -1,32 +1,44 @@
-if (typeof Object.create !== 'function') {
-  Object.create = function(o) {
-    function F() {}
-    F.prototype = o;
-    return new F();
-  };
-}
+//if (typeof Object.create !== 'function') {
+//  Object.create = function(o) {
+//    function F() {}
+//    F.prototype = o;
+//    return new F();
+//  };
+//}
+//
+//Function.prototype.method = function(name, func) {
+//  this.prototype[name] = func;
+//  return this;
+//};
+//
+//if (!Array.prototype.last) {
+//  Array.prototype.last = function() {
+//    return this[this.length - 1];
+//  };
+//}
+//
+//if (!Array.prototype.first) {
+//  Array.prototype.first = function() {
+//    return this[0];
+//  };
+//}
 
-Function.prototype.method = function(name, func) {
-  this.prototype[name] = func;
-  return this;
-};
-
-if (!Array.prototype.last) {
-  Array.prototype.last = function() {
-    return this[this.length - 1];
-  };
-}
-
-if (!Array.prototype.first) {
-  Array.prototype.first = function() {
-    return this[0];
-  };
-}
-
-var participant = function(spec) {
+this.participant = function(spec) {
 
   var that = {};
   var statusChangedEventHandlers = [];
+  var status;
+
+  var relinquishSpeakingPlace = function() {
+    spec.chair.relinquishSpeakingPlace(spec.id);
+  };
+
+  var getStatus = function() {
+    if (!status) {
+      status = spec.chair.getStatus(spec.id);
+    }
+    return status;
+  };
 
   if (spec.statusChangedEventHandlers !== undefined) {
     statusChangedEventHandlers.push.apply(statusChangedEventHandlers, spec.statusChangedEventHandlers);
@@ -40,22 +52,32 @@ var participant = function(spec) {
     return spec.name;
   };
 
-  that.getStatus = function() {
-    return spec.status;
-  };
+  that.getStatus = getStatus;
 
   that.isLocal = function() {
     return spec.local;
   };
 
-  that.setStatus = function(status) {
+  that.requestSpeakingPlace = function() {
+    spec.chair.requestSpeakingPlace(spec.id);
+  }
 
-    if (spec.status != status) {
-      var lastStatus = spec.status;
-      spec.status = status;
-      $.each(statusChangedEventHandlers, function(i, h) {
+  that.relinquishSpeakingPlace = relinquishSpeakingPlace
+
+  that.leave = function() {
+    if (getStatus() != 'listener') {
+      relinquishSpeakingPlace();
+    }
+  }
+
+  that.setStatus = function(newStatus) {
+
+    if (getStatus() != newStatus) {
+      var lastStatus = status;
+      status = newStatus;
+      $.each(statusChangedEventHandlers, function (i, h) {
         h({
-          participant : that,
+          participant: that,
           lastStatus: lastStatus
         });
       });
@@ -71,25 +93,25 @@ var participant = function(spec) {
   return that;
 };
 
-var participantMapper = function(hangoutWrapper, localParticipantId) {
+this.participantMapper = function(hangoutWrapper, localParticipantId) {
 
   return function(googleParticipant) {
 
-    var repositoryUpdatehandler = function(updateDetails) {
-      hangoutWrapper.setStatus(updateDetails.participant.getId(), updateDetails.participant.getStatus());
-    };
+//    var repositoryUpdatehandler = function(updateDetails) {
+//      hangoutWrapper.setStatus(updateDetails.participant.getId(), updateDetails.participant.getStatus());
+//    };
 
     return participant({
       id: googleParticipant.person.id,
       name: googleParticipant.person.displayName,
-      status: hangoutWrapper.getStatus(googleParticipant.person.id),
       local: googleParticipant.person.id == localParticipantId,
-      statusChangedEventHandlers: [ repositoryUpdatehandler ]
+      statusChangedEventHandlers: [],
+      chair : hangoutWrapper
     });
   };
 };
 
-var hangoutWrapper = function(gapi) {
+this.hangoutWrapper = function(gapi) {
 
   var that = {};
   var localParticipant, mapper;
@@ -101,13 +123,13 @@ var hangoutWrapper = function(gapi) {
     };
   };
 
-  that.start = function(participantsAddedHandler, participantsLeftHandler, statusChangedHandler, init) {
+  that.start = function(participantsAddedHandler, participantsLeftHandler, speakerQueueChangedHandler, init) {
     if (gapi.hangout.isApiReady()) {
-      setup(participantsAddedHandler, participantsLeftHandler, statusChangedHandler, init);
+      setup(participantsAddedHandler, participantsLeftHandler, speakerQueueChangedHandler, init);
     }
     else {
       var f = function() {
-        setup(participantsAddedHandler, participantsLeftHandler, statusChangedHandler, init);
+        setup(participantsAddedHandler, participantsLeftHandler, speakerQueueChangedHandler, init);
       };
       gapi.hangout.onApiReady.add(f);
     }
@@ -121,28 +143,29 @@ var hangoutWrapper = function(gapi) {
     mapper = participantMapper(that, googleLocalParticipant.person.id);
     return mapper(googleLocalParticipant);
   };
-  that.setStatus = function(participantId, status) {
-    gapi.hangout.data.setValue(participantId, status);
-  };
+
   that.getStatus = function(participantId) {
-    return gapi.hangout.data.getValue(participantId);
+    return gapi.hangout.data.getValue(participantId) ? 'speaker' : 'listener';
   };
-  that.clearStatus = function(participantId) {
-    return gapi.hangout.data.clearValue(participantId);
+  that.requestSpeakingPlace = function(participantId, status) {
+    gapi.hangout.data.setValue(participantId, 'RequestToSpeak');
+  };
+  that.relinquishSpeakingPlace = function(participantId) {
+    gapi.hangout.data.clearValue(participantId);
   };
 
-  var setup = function(participantsJoinedHandler, participantsLeftHandler, statusChangedHandler, init) {
+  var setup = function(participantsJoinedHandler, participantsLeftHandler, speakerQueueChangedHandler, init) {
     localParticipant = that.getLocalParticipant();
     gapi.hangout.onParticipantsAdded.add(getWrappedHandler(participantsJoinedHandler, mapper, 'addedParticipants'));
     gapi.hangout.onParticipantsRemoved.add(getWrappedHandler(participantsLeftHandler, mapper, 'removedParticipants'));
-    gapi.hangout.data.onStateChanged.add(statusChangedHandler);
+    gapi.hangout.data.onStateChanged.add(speakerQueueChangedHandler);
     init();
   };
 
   return that;
 };
 
-var renderer = function() {
+this.renderer = function() {
 
   var add = function(participant) {
     var className = ( participant.isLocal() ? 'localParticipant' : '');
@@ -176,10 +199,8 @@ var renderer = function() {
   };
 };
 
-var parkBenchPanel = function(repo, renderer) {
+this.parkBenchPanel = function(hangoutWrapper, renderer) {
 
-  var participantRepo = repo;
-  var participantRenderer = renderer;
   var participants = null;
 
   var getParticipantCounts = function() {
@@ -231,59 +252,49 @@ var parkBenchPanel = function(repo, renderer) {
     });
   };
 
+  var displayParticipants = function(f) {
+    $.each(participants, function(i, p) {
+      f(p);
+    });
+  };
+
   return {
     init: function() {
-      participants = participantRepo.getParticipants(); //Todo: pass the renderer event handler to get participants
-      setParticipantsStatusChangedEventHandler(participants, [ participantRenderer.statusChangedEventHandler ] );
-      displayRemoteParticipants(participantRenderer.add);
-      var localParticipant = participantRepo.getLocalParticipant();
-      participantRepo.clearStatus(localParticipant.getId());
-      localParticipant.setStatus('listener');
-    },
-    gotSomethingToSay: function(localParticipantName) {
-      var participant = getParticipantByName(localParticipantName);
-      var status = (getParticipantCounts().speaker < 2 ? 'speaker' : 'waiting');
-      participant.setStatus(status);
-    },
-    doneTalkin: function(localParticipantName) {
-      var participant = getParticipantByName(localParticipantName);
-      participant.setStatus('listener');
-
-      var waitingParticipants = getParticipantsByStatus('waiting');
-      if (waitingParticipants.length > 0) {
-        waitingParticipants[0].setStatus('speaker');
-      }
+      participants = hangoutWrapper.getParticipants(); //Todo: pass the renderer event handler to get participants
+      setParticipantsStatusChangedEventHandler(participants, [ renderer.statusChangedEventHandler ] );
+      displayParticipants(renderer.add);
+//      var localParticipant = hangoutWrapper.getLocalParticipant();
+//      hangoutWrapper.relinquishSpeakingPlace (localParticipant.getId());
+//      localParticipant.setStatus('listener');
     },
     getParticipants: function() {
       return participants;
     },
     newParticipantsJoined: function(newParticipants) {
-      setParticipantsStatusChangedEventHandler(newParticipants, [ participantRenderer.statusChangedEventHandler ] );
-      //setParticipantsStatus(newParticipants, 'listener');
+      setParticipantsStatusChangedEventHandler(newParticipants, [ renderer.statusChangedEventHandler ] );
       $.each(newParticipants, function(i, p) {
-        participantRenderer.add(p);
+        renderer.add(p);
         participants.push(p);
       });
     },
     participantLeaves: function(removedParticipants) {
       var removedIds = $.map(removedParticipants, function(p) { return p.getId(); } );
-      $.each(removedParticipants, function(i, p) {
-        participantRenderer.remove(p);
-      });
       participants = $.grep(participants, function(p) { return $.inArray(p.getId(), removedIds) < 0 } );
+      $.each(removedParticipants, function(i, p) {
+        p.leave();
+        renderer.remove(p)
+      });
     },
 
-    otherParticipantsChangedStatus: function(stateChangedEvent) {
-      //stateChangedEvents is more complicated
-      //? use stateChangedEvents.state
-      //also check that newParticipantsJoined is working correctly
-      $.each(stateChangedEvent.state, function(id, status) {
-        var p = getParticipantById(id);
+    speakerQueueChangedHandler: function(stateChangedEvent) {
+      var speakerIds = $.map(stateChangedEvent, function(s) { return s.key } );
+      $.each(participants, function(i, p) {
+        var status = $.inArray(p.getId(), speakerIds) < 0 ? 'listener' : 'speaker';
         p.setStatus(status);
       });
     },
     start: function() {
-      repo.start(this.newParticipantsJoined, this.participantLeaves, this.otherParticipantsChangedStatus, this.init);
+      hangoutWrapper.start(this.newParticipantsJoined, this.participantLeaves, this.speakerQueueChangedHandler, this.init);
     }
   };
 };

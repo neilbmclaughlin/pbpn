@@ -1,7 +1,8 @@
 extends pbp-base-page
 
 block append scripts
-  script(src='#{url}/../javascripts/test/fake-hangout.js')
+  script(src='#{url}/../javascripts/test/fake-gapi.js')
+  script(src='#{url}/../javascripts/test/testing-renderer.js')
   script(src='#{url}/../javascripts//park-bench-panel.js')
   script(src='#{url}/../javascripts/test/park-bench-panel-init.js')
 
@@ -15,3 +16,5 @@ block append body
     label(for='displayName') Name
     input#displayName.text(type='text')
     input#btnAddParticipant.button(type='button', value='Add new participant', onclick='gapi.hangout.addTestParticipant()')
+  div
+    input#btnAddParticipant.button(type='button', value='Display speaker queue', onclick='var q = gapi.hangout.getSpeakerQueue(); alert([Object.keys(q),Object.keys(q).map(function (k) { return q[k].timestamp })])')

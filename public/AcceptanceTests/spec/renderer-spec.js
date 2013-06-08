@@ -1,8 +1,19 @@
+$ = require('jquery');
+
+participant = require('../../javascripts/park-bench-panel.js').participant;
+renderer = require('../../javascripts/park-bench-panel.js').renderer;
+
+$("<ul id='listenerList'></ul>").appendTo("body");
+$("<ul id='waitingList'></ul>").appendTo("body");
+$("<ul id='speakerList'></ul>").appendTo("body");
+
+document = $.w
+
 describe("A list renderer", function() {
 
-    var r;
-    var GetListItems = function(listName) {
-        return document.getElementById(listName).getElementsByTagName("li");
+    var r, fakeHangoutWrapper;
+    var GetListItems = function(listId) {
+        return $('#' + listId + ' li');
     };
 
     beforeEach(function() {
@@ -11,15 +22,19 @@ describe("A list renderer", function() {
         $("#speakerList").empty();
         $("#waitingList").empty();
         $("#listenerList").empty();
+
+        fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus']);
+
     });
 
     it("Can respond to notification of a change of status for a participant", function() {
-        
-        var p1 = participant( { id: 1, name: 'Bob', status: 'speaker', local: true } );
+
+        fakeHangoutWrapper.getStatus.andReturn('speaker');
+        var p1 = participant( { id: 1, name: 'Bob', chair: fakeHangoutWrapper, local: true } );
         //act
         r.statusChangedEventHandler({
             participant: p1,
-            lastStatus: 'listener',
+            lastStatus: 'listener'
         });
 
         //assert
@@ -33,8 +48,9 @@ describe("A list renderer", function() {
         
         it("Adding participants to a list should identify the local participant", function() {
 
-            var p1 = participant( { id: 1, name: 'Bob', status: 'listener', local: true } );
-            var p2 = participant( { id: 1, name: 'Fred', status: 'listener', local: false } );
+            fakeHangoutWrapper.getStatus.andReturn('listener');
+            var p1 = participant( { id: 1, name: 'Bob', chair: fakeHangoutWrapper, local: true } );
+            var p2 = participant( { id: 2, name: 'Fred', chair: fakeHangoutWrapper,  local: false } );
             //act
             r.add(p1);
             r.add(p2);
@@ -51,8 +67,9 @@ describe("A list renderer", function() {
         it("Moving participants between lists should preserve the identification of the local participant", function() {
 
             //arange
-            var p1 = participant( { id: 1, name: 'Bob', status: 'listener', local: true } );
-            var p2 = participant( { id: 2, name: 'Fred', status: 'listener', local: false } );
+            fakeHangoutWrapper.getStatus.andReturn('listener');
+            var p1 = participant( { id: 1, name: 'Bob', chair: fakeHangoutWrapper, local: true } );
+            var p2 = participant( { id: 2, name: 'Fred', chair: fakeHangoutWrapper,  local: false } );
             r.add(p1);
             r.add(p2);
             p1.setStatus('speaker');
@@ -76,7 +93,7 @@ describe("A list renderer", function() {
         //act
         var p1 = participant( { id: 1, name: 'Bob', status: 'listener', local: true } );
         r.statusChangedEventHandler({
-            participant: p1,
+            participant: p1
         });
 
         //assert
@@ -119,7 +136,16 @@ describe("A list renderer", function() {
 
     it("Can remove an entry from a specified list", function() {
 
-        var p1 = participant( { id: 1, name: 'Bob', status: 'listener', local: true } );
+        var fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus']);
+        fakeHangoutWrapper.getStatus.andReturn('listener');
+
+        var p1 = participant({
+          name: 'Bob',
+          id: 1,
+          local: true,
+          chair: fakeHangoutWrapper
+        });
+
         r.add(p1);
         
 

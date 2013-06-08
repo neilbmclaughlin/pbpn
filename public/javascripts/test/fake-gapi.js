@@ -1,40 +1,34 @@
 var fakeLocalParticipant;
 
-var getFakeHangout = function() {
+var getFakeGapi = function() {
 
-  var stateList = {
-    1: undefined,
-    2 : 'listener',
-    3 : 'listener',
-    4 : 'listener',
-    5 : 'listener'
-  };
+  var speakerQueue = {};
 
   var getParticipants = function() {
     return [
       {
         person: {
-          id: '1',
+          id: 1,
           displayName: 'Bob'
         }
       }, {
         person: {
-          id: '2',
+          id: 2,
           displayName: 'Fred'
         }
       }, {
         person: {
-          id: '3',
+          id: 3,
           displayName: 'Bill'
         }
       }, {
         person: {
-          id: '4',
+          id: 4,
           displayName: 'Joe'
         }
       }, {
         person: {
-          id: '5',
+          id: 5,
           displayName: 'Alf'
         }
       }
@@ -68,13 +62,15 @@ var getFakeHangout = function() {
         }
       },
       getValue: function(key) {
-        return stateList[key];
+        return speakerQueue[key];
       },
       setValue: function(key, value) {
-        stateList[key] = value;
+        speakerQueue[key] = { key : key, value : value, timediff : 0, timestamp : new Date().getTime() };
+        stateChangedHandlerSpy( speakerQueue );
       },
       clearValue: function(key) {
-        stateList[key] = undefined;
+        delete speakerQueue[key];
+        stateChangedHandlerSpy( speakerQueue );
       }
     },
     getLocalParticipant : function() {
@@ -105,44 +101,11 @@ var getFakeHangout = function() {
         return (p.person.id != fakeLocalParticipant.id );
       });
       fakeLocalParticipant = participants[0];
+    },
+    getSpeakerQueue : function() {
+      return speakerQueue;
     }
   };
 };
 
-var testingRenderer = function() {
-
-  var that = renderer();
-
-  var super_add = that.add;
-  var super_remove = that.remove;
-
-  that.add = function(participant) {
-    super_add(participant);
-    var selectList = $('#localParticipantSelect');
-    $('<option/>')
-      .text(participant.getName())
-      .attr({
-        'selected' : participant.isLocal(),
-        'value' : participant.getId()
-      })
-      .appendTo(selectList);
-  };
-
-  that.remove = function(participant, oldStatus) {
-    super_remove(participant, oldStatus);
-    $('#localParticipantSelect option[value=' + participant.getId() + ']').remove();
-  };
-
-  that.move = function(participant, oldStatus) {
-    that.remove(participant, oldStatus);
-    that.add(participant);
-  };
-
-  that.statusChangedEventHandler = function(spec) {
-    that.move(spec.participant, spec.lastStatus);
-  };
-
-  return that;
-};
-
-gapi = { hangout : getFakeHangout() };
+gapi = { hangout : getFakeGapi() };
