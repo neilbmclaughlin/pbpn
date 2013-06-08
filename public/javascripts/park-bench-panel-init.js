@@ -8,11 +8,11 @@ $(document).ready(function() {
 });
 
 function startTalk() {
-  var localParticipantName = hangout.getLocalParticipant().getName();
-  pbp.gotSomethingToSay(localParticipantName);
+  var localParticipant = hangout.getLocalParticipant();
+  localParticipant.requestSpeakingPlace();
 }
 
 function stopTalk() {
-  var localParticipantName = hangout.getLocalParticipant().getName();
-  pbp.doneTalkin(localParticipantName);
+  var localParticipant = hangout.getLocalParticipant();
+  localParticipant.relinquishSpeakingPlace();
 }
