@@ -287,7 +287,7 @@ this.parkBenchPanel = function(hangoutWrapper, renderer) {
     },
 
     speakerQueueChangedHandler: function(stateChangedEvent) {
-      var speakerIds = $.map(stateChangedEvent, function(s) { return s.key } );
+      var speakerIds = $.map(stateChangedEvent.metadata, function(s) { return s.key } );
       $.each(participants, function(i, p) {
         var status = $.inArray(p.getId(), speakerIds) < 0 ? 'listener' : 'speaker';
         p.setStatus(status);
