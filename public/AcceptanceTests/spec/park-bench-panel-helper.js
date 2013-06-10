@@ -1,6 +1,6 @@
 this.getPbpParticipants = function(spec) {
     
-    var googleParticipants = getGoogleParticipants(spec.namelist);
+    var googleParticipants = getGoogleParticipants(spec.nameList);
     var mapper = participantMapper(spec.fakeHangoutWrapper, spec.localParticipantId);
 
     var pList = $.map(googleParticipants, mapper);
@@ -23,8 +23,8 @@ this.getGoogleParticipants = function(nameList) {
         function(n, i) { return { 
             person : { 
                 id : (i + 1).toString(), //TODO: decide if we need to use person.id or id
-                displayName : n,
-                }, 
+                displayName : n
+                }
             };
         });
 };

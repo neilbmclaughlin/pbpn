@@ -24,7 +24,7 @@ describe("A Park Bench Panel", function () {
     beforeEach(function () {
 
       participants = getPbpParticipants({
-        namelist: 'Bob,Fred,Bill',
+        nameList: 'Bob,Fred,Bill',
         status: 'listener',
         localParticipantId: localParticipantId,
         localParticipantStatus: undefined,
@@ -56,160 +56,45 @@ describe("A Park Bench Panel", function () {
     });
   });
 
-  describe("when the speaker list has been modified the status of all participants should be refreshed.", function() {
+  describe("when the speaker list has been modified ", function() {
 
-  });
-
-  describe("when a local participant requests to speak", function () {
-
-    var participants = [], localParticipantId;
-
-    it("then they should be added to the speaker queue", function () {
-
-      //Arrange
-      localParticipantId = 3;
-
-      participants = getPbpParticipants({
-        namelist: 'Bob,Fred,Bill',
-        status: 'listener',
-        localParticipantId: localParticipantId,
-        localParticipantStatus: 'listener',
-        fakeHangoutWrapper: fakeHangoutWrapper
-
-      });
-
-      fakeHangoutWrapper.getParticipants.andReturn(participants);
-      fakeHangoutWrapper.getLocalParticipant.andReturn(participants[localParticipantId - 1]);
-
-
-      pbp = parkBenchPanel(fakeHangoutWrapper, fakeRenderer);
-      pbp.init();
-      fakeRenderer.statusChangedEventHandler.reset();
-
-      //Act
-      participants[localParticipantId - 1].requestSpeakingPlace();
-
-      expect(fakeHangoutWrapper.requestSpeakingPlace.callCount).toEqual(1);
-      expect(fakeHangoutWrapper.requestSpeakingPlace.calls[0].args[0]).toEqual(localParticipantId.toString());
-    });
-
-    describe("given there are currently no speakers", function () {
-
-      beforeEach(function () {
-
-        //Arrange
-        localParticipantId = 3;
-
-        participants = getPbpParticipants({
-          namelist: 'Bob,Fred,Bill',
-          status: 'listener',
-          localParticipantId: localParticipantId,
-          localParticipantStatus: 'listener',
-          fakeHangoutWrapper: fakeHangoutWrapper
-
-        });
-
-        fakeHangoutWrapper.getParticipants.andReturn(participants);
-        fakeHangoutWrapper.getLocalParticipant.andReturn(participants[localParticipantId - 1]);
-
-
-        pbp = parkBenchPanel(fakeHangoutWrapper, fakeRenderer);
-        pbp.init();
-        fakeRenderer.statusChangedEventHandler.reset();
-
-        //Act
-        participants[localParticipantId - 1].requestSpeakingPlace();
-      });
-
-      it("then I should be placed on the speaker queue", function () {
-        expect(participants[localParticipantId - 1].getStatus()).toEqual('speaker');
-      });
-      it("then my status should be set to speaker", function () {
-        expect(participants[localParticipantId - 1].getStatus()).toEqual('speaker');
-      });
-      it("then the renderer should have been instructed update my status", function () {
-        expect(fakeRenderer.statusChangedEventHandler.callCount).toEqual(1);
-        expect(fakeRenderer.statusChangedEventHandler).toHaveBeenCalledWith({
-          participant: participants[localParticipantId - 1],
-          lastStatus: 'listener'
-        });
-      });
-    });
-
-    describe("given there are currently 3 speakers and the local participant wants to talk", function () {
-
-      beforeEach(function () {
-        localParticipantId = 4;
-        //Arrange
-        participants = getPbpParticipants({
-          namelist: 'Bob,Fred,Bill,Joe',
-          status: 'speaker',
-          localParticipantId: localParticipantId,
-          localParticipantStatus: 'listener',
-          fakeHangoutWrapper: fakeHangoutWrapper
-        });
-
-        fakeHangoutWrapper.getParticipants.andReturn(participants);
-        fakeHangoutWrapper.getLocalParticipant.andReturn(participants[localParticipantId - 1]);
-
-        pbp = parkBenchPanel(fakeHangoutWrapper, fakeRenderer);
-        pbp.init();
-        fakeRenderer.statusChangedEventHandler.reset();
-
-
-        //Act
-        pbp.gotSomethingToSay('Joe'); //Todo: use getlocalparticipant rather than pass name in
-      });
-      it("then the listener status should be set to waiting", function () {
-        expect(participants[localParticipantId - 1].getStatus()).toEqual('waiting');
-      });
-      it("then the renderer should update the display", function () {
-        expect(fakeRenderer.statusChangedEventHandler.callCount).toEqual(1);
-        expect(fakeRenderer.statusChangedEventHandler).toHaveBeenCalledWith({
-          participant: participants[localParticipantId - 1],
-          lastStatus: 'listener'
-        });
-      });
-    });
-
-  });
-
-  describe("when I am a speaker and I request to stop speaking", function () {
-
-    var participants = [], localParticipantId = 3;
+    var participants = [], localParticipantId = 2;
 
     beforeEach(function () {
 
-      //Arrange
       participants = getPbpParticipants({
-        namelist: 'Bob,Fred,Bill',
-        status: 'speaker',
+        nameList: 'Bob,Fred,Bill',
+        status: 'listener',
         localParticipantId: localParticipantId,
-        localParticipantStatus: 'speaker',
+        localParticipantStatus: undefined,
         fakeHangoutWrapper: fakeHangoutWrapper
       });
 
+      var stateChangedEvent = {
+        metadata : {
+          "1" : { key : "1", timestamp : 100 }
+        }
+      }
+
+      fakeHangoutWrapper.getStatus.andReturn('listener');
       fakeHangoutWrapper.getParticipants.andReturn(participants);
       fakeHangoutWrapper.getLocalParticipant.andReturn(participants[localParticipantId - 1]);
 
       pbp = parkBenchPanel(fakeHangoutWrapper, fakeRenderer);
       pbp.init();
+
       fakeRenderer.statusChangedEventHandler.reset();
+
+      //Act
+      debugger;
+      pbp.speakerQueueChangedHandler(stateChangedEvent);
+
     });
 
-    it("then my status should be set to listener", function () {
-      pbp.doneTalkin('Bill');
-      expect(participants[localParticipantId - 1].getStatus()).toEqual('listener');
-    });
-
-    describe("given there is a waiting participant", function () {
-      beforeEach(function () {
-        participants[0].setStatus('waiting');
-      });
-      it("then the waiting participant becomes a speaker", function () {
-        pbp.doneTalkin('Bill');
-        expect(participants[0].getStatus()).toEqual('speaker');
-      });
+    it("then the status of all participants should be updated", function() {
+      expect(participants[0].getStatus()).toEqual('speaker');
+      expect(participants[1].getStatus()).toEqual('listener');
+      expect(participants[2].getStatus()).toEqual('listener');
     });
 
   });
@@ -222,7 +107,7 @@ describe("A Park Bench Panel", function () {
 
       //Arrange
       var participants = getPbpParticipants({
-        namelist: 'Bob,Fred,Bill',
+        nameList: 'Bob,Fred,Bill',
         status: 'listener',
         localParticipantId: localParticipantId,
         localParticipantStatus: 'listener',
@@ -267,7 +152,7 @@ describe("A Park Bench Panel", function () {
 
       //Arrange
       participants = getPbpParticipants({
-        namelist: 'Bob,Fred,Bill',
+        nameList: 'Bob,Fred,Bill',
         status: 'listener',
         localParticipantId: localParticipantId,
         localParticipantStatus: 'listener',
@@ -285,37 +170,20 @@ describe("A Park Bench Panel", function () {
       fakeRenderer.remove.reset();
     });
 
-    describe("the participant is not the local participant", function () {
-
-      beforeEach(function () {
-        //Act
-        pbp.participantLeaves([ participants[nonLocalParticipantId - 1] ]);
-      });
-
-      it("then the participant is removed from the park bench panel", function () {
-        expect(pbp.getParticipants().length).toEqual(2);
-      });
-      it("then the status in the repository should not be updated", function () {
-        expect(fakeHangoutWrapper.statusChangedEventHandler.callCount).toEqual(0);
-      });
-      it("then the renderer should notified of a participant left event", function () {
-        expect(fakeRenderer.remove.callCount).toEqual(1);
-        expect(fakeRenderer.remove.calls[0].args[0].getName()).toEqual('Bob');
-        expect(fakeRenderer.remove.calls[0].args[0].getStatus()).toEqual('listener');
-      });
+    it("then they are removed from the participant list", function () {
+      //Act
+      pbp.participantLeaves([ participants[0] ]);
+      expect(pbp.getParticipants().length).toEqual(2);
     });
 
-    describe("the participant is the local participant", function () {
-      //Act
-      beforeEach(function () {
-        //Act
-        pbp.participantLeaves([ participants[localParticipantId - 1] ]);
-      });
+    it("then the participant has been instructed to leave", function () {
+      //Arrange
+      participants[0].leave = jasmine.createSpy('dummy');
 
-      it("then the status in the repository should be updated", function () {
-        expect(fakeHangoutWrapper.clearStatus.callCount).toEqual(1);
-        expect(fakeHangoutWrapper.clearStatus.calls[0].args[0]).toEqual(localParticipantId.toString());
-      });
+      //Act
+      pbp.participantLeaves([ participants[0] ]);
+
+      expect(participants[0].leave).toHaveBeenCalled();
     });
 
   });

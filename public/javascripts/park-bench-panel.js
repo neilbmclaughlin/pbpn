@@ -27,6 +27,7 @@ this.participant = function(spec) {
 
   var that = {};
   var statusChangedEventHandlers = [];
+  var leaveEventHandlers = [];
   var status;
 
   var relinquishSpeakingPlace = function() {
@@ -65,7 +66,12 @@ this.participant = function(spec) {
   that.relinquishSpeakingPlace = relinquishSpeakingPlace
 
   that.leave = function() {
-    if (getStatus() != 'listener') {
+    $.each(leaveEventHandlers, function (i, h) {
+      h(that);
+    });
+
+
+    if (spec.local && getStatus() != 'listener') {
       relinquishSpeakingPlace();
     }
   }
@@ -89,6 +95,13 @@ this.participant = function(spec) {
       statusChangedEventHandlers.push(h);
     });
   };
+
+  that.addOnLeaveHandlers = function(handlers) {
+    $.each(handlers, function(i, h) {
+      leaveEventHandlers.push(h);
+    });
+  };
+
 
   return that;
 };

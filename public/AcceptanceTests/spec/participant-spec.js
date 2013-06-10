@@ -1,11 +1,11 @@
 $ = require('jquery');
-;
 
 participant = require('../../javascripts/park-bench-panel.js').participant;
 
 describe("A participant", function () {
 
   it("should notify subscribers of status changes", function () {
+
     //arrange
     var fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus']);
     fakeHangoutWrapper.getStatus.andReturn('listener');
@@ -33,6 +33,77 @@ describe("A participant", function () {
       lastStatus: 'listener'
     });
   });
+
+  describe("when a participant leaves", function() {
+
+    var p1, leaveHandler, fakeHangoutWrapper;
+    beforeEach(function() {
+      //arrange
+      fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus', 'relinquishSpeakingPlace']);
+      fakeHangoutWrapper.getStatus.andReturn('listener');
+
+      p1 = participant({
+        name: 'Bob',
+        id: 1,
+        chair: fakeHangoutWrapper
+      });
+      leaveHandler = jasmine.createSpy('leaveHandler');
+      p1.addOnLeaveHandlers([leaveHandler]);
+
+
+    });
+
+    it("should notify subscribers", function() {
+      //Act
+      p1.leave();
+
+      //Assert
+      expect(leaveHandler).toHaveBeenCalledWith(p1);
+    });
+
+    it("if local and holding a speaking place then should relinquish it", function() {
+      //Arrange
+      var p = participant({
+        name: 'Bob',
+        id: 1,
+        local: true,
+        chair: fakeHangoutWrapper
+      });
+      leaveHandler = jasmine.createSpy('leaveHandler');
+      p.addOnLeaveHandlers([leaveHandler]);
+
+      fakeHangoutWrapper.getStatus.andReturn('speaker');
+
+      //Act
+      p.leave();
+
+      //Assert
+      expect(fakeHangoutWrapper.relinquishSpeakingPlace).toHaveBeenCalledWith(1);
+    });
+
+    it("if not local and holding a speaking place then should not relinquish it", function() {
+      //Arrange
+      var p = participant({
+        name: 'Bob',
+        id: 1,
+        local: false,
+        chair: fakeHangoutWrapper
+      });
+      leaveHandler = jasmine.createSpy('leaveHandler');
+      p.addOnLeaveHandlers([leaveHandler]);
+
+      fakeHangoutWrapper.getStatus.andReturn('speaker');
+
+      //Act
+      p.leave();
+
+      //Assert
+      expect(fakeHangoutWrapper.relinquishSpeakingPlace).not.toHaveBeenCalled();
+    });
+
+
+  });
+
 
   it("should not notify subscribers if the status is unchanged", function () {
     //arrange
