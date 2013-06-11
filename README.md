@@ -27,3 +27,4 @@ Notes
 useful commands:
 jasmine-node --autotest public/AcceptanceTests/spec
 foreman start -f Procfile.dev (Procfile.dev uses nodemon rather than node)
+node node_modules/jasmine-node/lib/jasmine-node/cli.js public/AcceptanceTests/spec + node-inspector for debugging

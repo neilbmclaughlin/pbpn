@@ -71,7 +71,7 @@ this.participant = function(spec) {
     });
 
 
-    if (spec.local && getStatus() != 'listener') {
+    if (getStatus() != 'listener') {
       relinquishSpeakingPlace();
     }
   }
