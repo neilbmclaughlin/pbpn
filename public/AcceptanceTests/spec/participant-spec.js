@@ -61,12 +61,18 @@ describe("A participant", function () {
       expect(leaveHandler).toHaveBeenCalledWith(p1);
     });
 
-    it("if local and holding a speaking place then should relinquish it", function() {
+    it("if holding a speaking place then it should be relinquished", function() {
+
+      // Note: This functionality will result in a call to relinquish the speaking place for the participant who has left
+      // from each hangout client (ie if there are 9 participants using the hangout app and participant 1 is in the
+      // speaker queue and leaves then there will be 8 calls to clear the place from the speaker queue. Since it is
+      // idempotent this does not matter but is as a consequence of the removed event not being triggered for the
+      // participant who leaves before they leave)
+
       //Arrange
       var p = participant({
         name: 'Bob',
         id: 1,
-        local: true,
         chair: fakeHangoutWrapper
       });
       leaveHandler = jasmine.createSpy('leaveHandler');
@@ -80,27 +86,6 @@ describe("A participant", function () {
       //Assert
       expect(fakeHangoutWrapper.relinquishSpeakingPlace).toHaveBeenCalledWith(1);
     });
-
-    it("if not local and holding a speaking place then should not relinquish it", function() {
-      //Arrange
-      var p = participant({
-        name: 'Bob',
-        id: 1,
-        local: false,
-        chair: fakeHangoutWrapper
-      });
-      leaveHandler = jasmine.createSpy('leaveHandler');
-      p.addOnLeaveHandlers([leaveHandler]);
-
-      fakeHangoutWrapper.getStatus.andReturn('speaker');
-
-      //Act
-      p.leave();
-
-      //Assert
-      expect(fakeHangoutWrapper.relinquishSpeakingPlace).not.toHaveBeenCalled();
-    });
-
 
   });
 
