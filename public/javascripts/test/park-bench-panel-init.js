@@ -7,11 +7,9 @@ $(document).ready(function() {
 });
 
 function startTalk() {
-  var localParticipant = hangout.getLocalParticipant();
-  localParticipant.requestSpeakingPlace();
+  pbp.startTalking();
 }
 
 function stopTalk() {
-  var localParticipant = hangout.getLocalParticipant();
-  localParticipant.relinquishSpeakingPlace();
+  pbp.stopTalking();
 }

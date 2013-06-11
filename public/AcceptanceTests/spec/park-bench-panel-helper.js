@@ -1,7 +1,7 @@
 this.getPbpParticipants = function(spec) {
     
     var googleParticipants = getGoogleParticipants(spec.nameList);
-    var mapper = participantMapper(spec.fakeHangoutWrapper, spec.localParticipantId);
+    var mapper = participantMapper(spec.fakeHangoutWrapper, []);
 
     var pList = $.map(googleParticipants, mapper);
                         

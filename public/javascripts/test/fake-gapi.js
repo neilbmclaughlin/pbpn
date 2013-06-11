@@ -66,11 +66,11 @@ var getFakeGapi = function() {
       },
       setValue: function(key, value) {
         speakerQueue[key] = { key : key, value : value, timediff : 0, timestamp : new Date().getTime() };
-        stateChangedHandlerSpy( speakerQueue );
+        stateChangedHandlerSpy( { metadata: speakerQueue } );
       },
       clearValue: function(key) {
         delete speakerQueue[key];
-        stateChangedHandlerSpy( speakerQueue );
+        stateChangedHandlerSpy( { metadata: speakerQueue } );
       }
     },
     getLocalParticipant : function() {

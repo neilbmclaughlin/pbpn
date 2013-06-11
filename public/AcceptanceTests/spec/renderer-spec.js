@@ -24,14 +24,16 @@ describe("A list renderer", function () {
     $("#waitingList").empty();
     $("#listenerList").empty();
 
-    fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus']);
+    fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus', 'getLocalParticipant']);
+    fakeHangoutWrapper.getLocalParticipant.andReturn({ getId : function() {return 1} });
+
 
   });
 
   it("Can respond to notification of a change of status for a participant", function () {
 
     fakeHangoutWrapper.getStatus.andReturn('speaker');
-    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper, local: true });
+    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
     //act
     r.statusChangedEventHandler({
       participant: p1,
@@ -50,8 +52,8 @@ describe("A list renderer", function () {
     it("Adding participants to a list should identify the local participant", function () {
 
       fakeHangoutWrapper.getStatus.andReturn('listener');
-      var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper, local: true });
-      var p2 = participant({ id: 2, name: 'Fred', chair: fakeHangoutWrapper, local: false });
+      var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
+      var p2 = participant({ id: 2, name: 'Fred', chair: fakeHangoutWrapper });
       //act
       r.add(p1);
       r.add(p2);
@@ -69,8 +71,8 @@ describe("A list renderer", function () {
 
       //arange
       fakeHangoutWrapper.getStatus.andReturn('listener');
-      var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper, local: true });
-      var p2 = participant({ id: 2, name: 'Fred', chair: fakeHangoutWrapper, local: false });
+      var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
+      var p2 = participant({ id: 2, name: 'Fred', chair: fakeHangoutWrapper });
       r.add(p1);
       r.add(p2);
       p1.setStatus('speaker');
@@ -93,7 +95,7 @@ describe("A list renderer", function () {
   it("New participants will not have a last status and should just be added to the listener list", function () {
     //act
     fakeHangoutWrapper.getStatus.andReturn('listener');
-    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper, local: true });
+    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
 
     r.statusChangedEventHandler({
       participant: p1
@@ -110,8 +112,8 @@ describe("A list renderer", function () {
 
     fakeHangoutWrapper.getStatus.andReturn('listener');
 
-    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper, local: true });
-    var p2 = participant({ id: 1, name: 'Fred', chair: fakeHangoutWrapper, local: false });
+    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
+    var p2 = participant({ id: 1, name: 'Fred', chair: fakeHangoutWrapper });
     //act
     r.add(p1);
     r.add(p2);
@@ -127,7 +129,7 @@ describe("A list renderer", function () {
 
     fakeHangoutWrapper.getStatus.andReturn('listener');
 
-    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper, local: true });
+    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
 
     //act
     r.add(p1);
@@ -141,13 +143,9 @@ describe("A list renderer", function () {
 
   it("Can remove an entry from a specified list", function () {
 
-    var fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus']);
-    fakeHangoutWrapper.getStatus.andReturn('listener');
-
     var p1 = participant({
       name: 'Bob',
       id: 1,
-      local: true,
       chair: fakeHangoutWrapper
     });
 
@@ -166,7 +164,7 @@ describe("A list renderer", function () {
 
     fakeHangoutWrapper.getStatus.andReturn('listener');
 
-    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper, local: true });
+    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
     r.add(p1);
 
 
@@ -183,7 +181,7 @@ describe("A list renderer", function () {
     //arrange
     fakeHangoutWrapper.getStatus.andReturn('listener');
 
-    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper, local: true });
+    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
     r.add(p1);
     p1.setStatus('speaker');
 

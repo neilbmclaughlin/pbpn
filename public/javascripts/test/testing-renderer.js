@@ -1,4 +1,4 @@
-var testingRenderer = function() {
+this.testingRenderer = function() {
 
   var that = renderer();
 
@@ -27,9 +27,18 @@ var testingRenderer = function() {
     that.add(participant);
   };
 
+  that.joinEventHandler = function(spec) {
+    that.add(spec.participant);
+  };
+
   that.statusChangedEventHandler = function(spec) {
     that.move(spec.participant, spec.lastStatus);
   };
+
+  that.leaveEventHandler = function(spec) {
+    remove(spec.participant, spec.lastStatus);
+  };
+
 
   return that;
 };

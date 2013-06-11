@@ -4,6 +4,32 @@ participant = require('../../javascripts/park-bench-panel.js').participant;
 
 describe("A participant", function () {
 
+  it("should be flagged as the local participant", function () {
+
+    //arrange
+    var fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus', 'getLocalParticipant']);
+    fakeHangoutWrapper.getStatus.andReturn('listener');
+
+    var p1 = participant({
+      name: 'Bob',
+      id: 1,
+      chair: fakeHangoutWrapper
+    });
+    var p2 = participant({
+      name: 'Fred',
+      id: 2,
+      chair: fakeHangoutWrapper
+    });
+    fakeHangoutWrapper.getLocalParticipant.andReturn(p1);
+
+    //Act
+
+    //Assert
+    expect(p1.isLocal()).toBe(true);
+    expect(p2.isLocal()).toBe(false);
+  });
+
+
   it("should notify subscribers of status changes", function () {
 
     //arrange
