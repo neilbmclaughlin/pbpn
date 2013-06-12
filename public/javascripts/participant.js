@@ -4,21 +4,22 @@ this.participant = function(spec) {
   var statusChangedEventHandlers = [];
   var leaveEventHandlers = [];
   var joinEventHandlers = [];
-  var status;
+  var status = spec.status || 'listener';
 
   var relinquishSpeakingPlace = function() {
     spec.chair.relinquishSpeakingPlace(spec.id);
   };
 
-  var getStatus = function() {
-    if (!status) {
-      status = spec.chair.getStatus(spec.id);
-    }
-    return status;
-  };
-
-  if (spec.statusChangedEventHandlers !== undefined) {
+  if (spec.onStatusChangedEventHandlers !== undefined) {
     statusChangedEventHandlers.push.apply(statusChangedEventHandlers, spec.statusChangedEventHandlers);
+  }
+
+  if (spec.onJoinEventHandlers !== undefined) {
+    joinEventHandlers.push.apply(joinEventHandlers, spec.joinEventHandlers);
+  }
+
+  if (spec.onLeaveEventHandlers !== undefined) {
+    leaveEventHandlers.push.apply(leaveEventHandlers, spec.onLeaveEventHandlers);
   }
 
   that.getId = function() {
@@ -29,7 +30,24 @@ this.participant = function(spec) {
     return spec.name;
   };
 
-  that.getStatus = getStatus;
+  that.getStatus = function() {
+    return status;
+  };
+
+
+  that.setStatus = function(newStatus) {
+
+    if (status != newStatus) {
+      var lastStatus = status;
+      status = newStatus;
+      $.each(statusChangedEventHandlers, function (i, h) {
+        h({
+          participant: that,
+          lastStatus: lastStatus
+        });
+      });
+    }
+  };
 
   that.isLocal = function() {
     return spec.chair.getLocalParticipant().getId() == spec.id;
@@ -47,29 +65,16 @@ this.participant = function(spec) {
     });
 
 
-    if (getStatus() != 'listener') {
+    if (that.getStatus() != 'listener') {
       relinquishSpeakingPlace();
     }
   };
 
   that.join = function() {
+    relinquishSpeakingPlace();
     $.each(joinEventHandlers, function (i, h) {
-      h({ participant: that });
+      h(that);
     });
-  };
-
-  that.setStatus = function(newStatus) {
-
-    if (getStatus() != newStatus) {
-      var lastStatus = status;
-      status = newStatus;
-      $.each(statusChangedEventHandlers, function (i, h) {
-        h({
-          participant: that,
-          lastStatus: lastStatus
-        });
-      });
-    }
   };
 
   that.addOnStatusChangedHandlers = function(handlers) {

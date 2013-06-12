@@ -1,8 +1,8 @@
 $ = require('jquery');;
 
 helper = require('./park-bench-panel-helper.js');
-participant = require('../../javascripts/park-bench-panel.js').participant;
-participantMapper = require('../../javascripts/park-bench-panel.js').participantMapper;
+participant = require('../../javascripts/participant.js').participant;
+participantMapper = require('../../javascripts/participantMapper.js').participantMapper;
 
 
 describe("A participant mapper", function() {
@@ -29,7 +29,6 @@ describe("A participant mapper", function() {
         expect(participant.getId()).toEqual('1');
         expect(participant.getName()).toEqual('Bob');
         expect(participant.getStatus()).toEqual('listener');
-        expect(fakeHangout.getStatus).toHaveBeenCalledWith('1');
     });
 
 });

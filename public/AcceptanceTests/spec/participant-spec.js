@@ -1,14 +1,13 @@
 $ = require('jquery');
 
-participant = require('../../javascripts/park-bench-panel.js').participant;
+participant = require('../../javascripts/participant.js').participant;
 
 describe("A participant", function () {
 
-  it("should be flagged as the local participant", function () {
+  it("should be flagged as local or not local", function () {
 
     //arrange
-    var fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus', 'getLocalParticipant']);
-    fakeHangoutWrapper.getStatus.andReturn('listener');
+    var fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getLocalParticipant']);
 
     var p1 = participant({
       name: 'Bob',
@@ -33,13 +32,9 @@ describe("A participant", function () {
   it("should notify subscribers of status changes", function () {
 
     //arrange
-    var fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus']);
-    fakeHangoutWrapper.getStatus.andReturn('listener');
-
     var p1 = participant({
       name: 'Bob',
-      id: 1,
-      chair: fakeHangoutWrapper
+      id: 1
     });
     var statusChangedHandler1 = jasmine.createSpy('statusChangedHandler1');
     var statusChangedHandler2 = jasmine.createSpy('statusChangedHandler2');
@@ -65,17 +60,15 @@ describe("A participant", function () {
     var p1, leaveHandler, fakeHangoutWrapper;
     beforeEach(function() {
       //arrange
-      fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus', 'relinquishSpeakingPlace']);
-      fakeHangoutWrapper.getStatus.andReturn('listener');
+      fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['relinquishSpeakingPlace']);
+      leaveHandler = jasmine.createSpy('leaveHandler');
 
       p1 = participant({
         name: 'Bob',
         id: 1,
-        chair: fakeHangoutWrapper
+        chair: fakeHangoutWrapper,
+        onLeaveEventHandlers: [ leaveHandler ]
       });
-      leaveHandler = jasmine.createSpy('leaveHandler');
-      p1.addOnLeaveHandlers([leaveHandler]);
-
 
     });
 
@@ -99,12 +92,11 @@ describe("A participant", function () {
       var p = participant({
         name: 'Bob',
         id: 1,
+        status: 'speaker',
         chair: fakeHangoutWrapper
       });
       leaveHandler = jasmine.createSpy('leaveHandler');
       p.addOnLeaveHandlers([leaveHandler]);
-
-      fakeHangoutWrapper.getStatus.andReturn('speaker');
 
       //Act
       p.leave();
@@ -113,17 +105,42 @@ describe("A participant", function () {
       expect(fakeHangoutWrapper.relinquishSpeakingPlace).toHaveBeenCalledWith(1);
     });
 
+    it("if not holding a speaking place then it should not relinquish", function() {
+
+      // Note: This functionality will result in a call to relinquish the speaking place for the participant who has left
+      // from each hangout client (ie if there are 9 participants using the hangout app and participant 1 is in the
+      // speaker queue and leaves then there will be 8 calls to clear the place from the speaker queue. Since it is
+      // idempotent this does not matter but is as a consequence of the removed event not being triggered for the
+      // participant who leaves before they leave)
+
+      //Arrange
+      var p = participant({
+        name: 'Bob',
+        id: 1,
+        status: 'listener',
+        chair: fakeHangoutWrapper
+      });
+      leaveHandler = jasmine.createSpy('leaveHandler');
+      p.addOnLeaveHandlers([leaveHandler]);
+
+      //Act
+      p.leave();
+
+      //Assert
+      expect(fakeHangoutWrapper.relinquishSpeakingPlace).not.toHaveBeenCalled();
+    });
+
   });
 
 
   it("should not notify subscribers if the status is unchanged", function () {
     //arrange
     var fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus']);
-    fakeHangoutWrapper.getStatus.andReturn('listener');
 
     var p1 = participant({
       name: 'Bob',
       id: 1,
+      status: 'listener',
       chair: fakeHangoutWrapper
     });
     var statusChangedHandler1 = jasmine.createSpy('statusChangedHandler1');

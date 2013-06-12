@@ -5,7 +5,6 @@ this.participantMapper = function(hangoutWrapper) {
     return participant({
       id: googleParticipant.person.id,
       name: googleParticipant.person.displayName,
-      statusChangedEventHandlers: [],
       chair : hangoutWrapper
     });
   };

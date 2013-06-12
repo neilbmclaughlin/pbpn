@@ -21,16 +21,11 @@ this.hangoutWrapper = function(gapi) {
     }
   };
   that.getLocalParticipant = function() {
-    return participantMapper(gapi.hangout)(gapi.hangout.getLocalParticipant());
+    var mapper = participantMapper(that);
+    return mapper(gapi.hangout.getLocalParticipant());
   }
-  that.getParticipants = function(joinEventHandlers, statusChangedEventHandlers, leaveEventHandlers) {
-    var participants = $.map(gapi.hangout.getParticipants(), participantMapper(that));
-    $.each(participants, function(i, p) {
-      p.addOnJoinHandlers(joinEventHandlers);
-      p.addOnStatusChangedHandlers(statusChangedEventHandlers);
-      p.addOnLeaveHandlers(leaveEventHandlers);
-    });
-    return participants;
+  that.getParticipants = function() {
+    return $.map(gapi.hangout.getParticipants(), participantMapper(that));
   };
   that.getStatus = function(participantId) {
     return gapi.hangout.data.getValue(participantId) ? 'speaker' : 'listener';

@@ -12,7 +12,7 @@ this.renderer = function() {
   };
 
   var remove = function(participant, oldStatus) {
-    var listName = '#' + ( oldStatus || participant.getStatus() ) + 'List';
+    var listName = '#' + oldStatus + 'List';
     var listItem = $(listName + ' li:contains("' + participant.getName() + '")');
     listItem.slideUp(500, 'linear', function () { $(this).remove();});
   };
@@ -23,17 +23,14 @@ this.renderer = function() {
   };
 
   return {
-    add: add,
-    remove: remove,
-    move: move,
-    joinEventHandler: function(spec) {
-      add(spec.participant);
+    joinEventHandler: function(participant) {
+      add(participant);
     },
     statusChangedEventHandler: function(spec) {
       move(spec.participant, spec.lastStatus);
     },
-    leaveEventHandler: function(spec) {
-      remove(spec.participant, spec.lastStatus);
+    leaveEventHandler: function(participant) {
+      remove(participant, participant.getStatus());
     }
   };
 };

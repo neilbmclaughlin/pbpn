@@ -38,7 +38,6 @@ this.parkBenchPanel = function(hangoutWrapper, renderer) {
     });
   };
 
-
   var setParticipantsStatusChangedEventHandler = function(participants, eventHandlers) {
     $.each(participants, function(i, p) {
       p.addOnStatusChangedHandlers(eventHandlers);
@@ -57,9 +56,20 @@ this.parkBenchPanel = function(hangoutWrapper, renderer) {
     });
   };
 
+  var wireUpParticipant = function(p) {
+    p.addOnJoinHandlers([renderer.joinEventHandler]);
+    p.addOnStatusChangedHandlers([ renderer.statusChangedEventHandler ]);
+    p.addOnLeaveHandlers([renderer.leaveEventHandler]);
+    return p;
+  }
+
+  var loadParticipants = function() {
+    return hangoutWrapper.getParticipants().map(function(p) { return wireUpParticipant(p)});
+  };
+
   return {
     init: function() {
-      participants = hangoutWrapper.getParticipants([renderer.joinEventHandler], [ renderer.statusChangedEventHandler ], [renderer.leaveEventHandler]);
+      participants = loadParticipants();
       $.each(participants, function(i, p) { p.join() });
     },
     getParticipants: function() {
@@ -72,18 +82,18 @@ this.parkBenchPanel = function(hangoutWrapper, renderer) {
       hangoutWrapper.getLocalParticipant().relinquishSpeakingPlace();
     },
     newParticipantsJoined: function(newParticipants) {
-      setParticipantsStatusChangedEventHandler(newParticipants, [ renderer.statusChangedEventHandler ] );
+      newParticipants = newParticipants.map(function(p) { return wireUpParticipant(p)});
       $.each(newParticipants, function(i, p) {
-        renderer.add(p);
+        p.join();
         participants.push(p);
       });
     },
     participantLeaves: function(removedParticipants) {
       var removedIds = $.map(removedParticipants, function(p) { return p.getId(); } );
       participants = $.grep(participants, function(p) { return $.inArray(p.getId(), removedIds) < 0 } );
+      removedParticipants = removedParticipants.map(function(p) { return wireUpParticipant(p)});
       $.each(removedParticipants, function(i, p) {
         p.leave();
-        //renderer.remove(p)
       });
     },
 

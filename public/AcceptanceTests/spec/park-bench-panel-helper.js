@@ -1,20 +1,36 @@
 this.getPbpParticipants = function(spec) {
-    
-    var googleParticipants = getGoogleParticipants(spec.nameList);
-    var mapper = participantMapper(spec.fakeHangoutWrapper, []);
 
-    var pList = $.map(googleParticipants, mapper);
-                        
-    $.each(pList, function(i, p) {
-        if (p.getId() != spec.localParticipantId) {
-            p.setStatus(spec.status);
-        }
+  return $.map(
+    spec.nameList.split(','),
+    function(n, i) {
+      return participant({
+        name: n,
+        id: (i + 1).toString(),
+        chair: spec.fakeHangoutWrapper,
+        onJoinEventHandlers: spec.onJoinEventHandlers,
+        onStatusChangedEventHandlers: spec.onStatusChangedEventHandlers,
+        onLeaveEventHandlers: spec.onLeaveEventHandlers
+      });
+
     });
-    pList[spec.localParticipantId - 1].setStatus(spec.localParticipantStatus);
-    spec.fakeHangoutWrapper.requestSpeakingPlace.reset();
-    spec.fakeHangoutWrapper.relinquishSpeakingPlace.reset();
-    
-    return pList;
+
+
+
+
+//    var mapper = participantMapper(spec.fakeHangoutWrapper);
+//
+//    var pList = $.map(googleParticipants, mapper);
+//
+//    $.each(pList, function(i, p) {
+//        if (p.getId() != spec.localParticipantId) {
+//            p.setStatus(spec.status);
+//        }
+//    });
+//    pList[spec.localParticipantId - 1].setStatus(spec.localParticipantStatus);
+//    spec.fakeHangoutWrapper.requestSpeakingPlace.reset();
+//    spec.fakeHangoutWrapper.relinquishSpeakingPlace.reset();
+//
+//    return pList;
 };
 
 this.getGoogleParticipants = function(nameList) {

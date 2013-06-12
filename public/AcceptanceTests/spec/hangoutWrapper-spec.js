@@ -1,9 +1,9 @@
 $ = require('jquery');
 
 helper = require('./park-bench-panel-helper.js');
-participant = require('../../javascripts/park-bench-panel.js').participant;
-participantMapper = require('../../javascripts/park-bench-panel.js').participantMapper;
-hangoutWrapper = require('../../javascripts/park-bench-panel.js').hangoutWrapper;
+participant = require('../../javascripts/participant.js').participant;
+participantMapper = require('../../javascripts/participantMapper.js').participantMapper;
+hangoutWrapper = require('../../javascripts/hangoutWrapper.js').hangoutWrapper;
 
 
 describe("A hangout wrapper", function () {

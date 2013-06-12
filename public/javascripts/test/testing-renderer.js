@@ -2,11 +2,12 @@ this.testingRenderer = function() {
 
   var that = renderer();
 
-  var super_add = that.add;
-  var super_remove = that.remove;
+  var super_joinEventHandler = that.joinEventHandler;
+  var super_statusChangedEventHandler = that.statusChangedEventHandler;
+  var super_leaveEventHandler = that.leaveEventHandler;
 
-  that.add = function(participant) {
-    super_add(participant);
+  that.joinEventHandler = function(participant) {
+    super_joinEventHandler(participant);
     var selectList = $('#localParticipantSelect');
     $('<option/>')
       .text(participant.getName())
@@ -17,27 +18,16 @@ this.testingRenderer = function() {
       .appendTo(selectList);
   };
 
-  that.remove = function(participant, oldStatus) {
-    super_remove(participant, oldStatus);
+  that.statusChangedEventHandler = function(spec) {
+    super_statusChangedEventHandler(spec);
+  };
+
+
+  that.leaveEventHandler = function(participant) {
+    super_leaveEventHandler(participant);
     $('#localParticipantSelect option[value=' + participant.getId() + ']').remove();
   };
 
-  that.move = function(participant, oldStatus) {
-    that.remove(participant, oldStatus);
-    that.add(participant);
-  };
-
-  that.joinEventHandler = function(spec) {
-    that.add(spec.participant);
-  };
-
-  that.statusChangedEventHandler = function(spec) {
-    that.move(spec.participant, spec.lastStatus);
-  };
-
-  that.leaveEventHandler = function(spec) {
-    remove(spec.participant, spec.lastStatus);
-  };
 
 
   return that;
