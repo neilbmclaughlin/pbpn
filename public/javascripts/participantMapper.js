@@ -5,7 +5,8 @@ this.participantMapper = function(hangoutWrapper) {
     return participant({
       id: googleParticipant.person.id,
       name: googleParticipant.person.displayName,
-      chair : hangoutWrapper
+      chair : hangoutWrapper,
+      status : hangoutWrapper.getStatus(googleParticipant.person.id)
     });
   };
 };

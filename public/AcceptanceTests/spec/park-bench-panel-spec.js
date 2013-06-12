@@ -70,13 +70,9 @@ describe("A Park Bench Panel", function () {
         fakeHangoutWrapper: fakeHangoutWrapper
       });
 
-      var stateChangedEvent = {
-        metadata : {
-          "1" : { key : "1", timestamp : 100 }
-        }
-      }
+      var statuses = ['speaker', 'listener', 'listener'];
 
-      fakeHangoutWrapper.getStatus.andReturn('listener');
+      fakeHangoutWrapper.getStatus.andCallFake(function(id) { return statuses[id - 1] });
       fakeHangoutWrapper.getParticipants.andReturn(participants);
       fakeHangoutWrapper.getLocalParticipant.andReturn(participants[localParticipantId - 1]);
 
@@ -87,7 +83,7 @@ describe("A Park Bench Panel", function () {
 
       //Act
       debugger;
-      pbp.speakerQueueChangedHandler(stateChangedEvent);
+      pbp.speakerQueueChangedHandler({});
 
     });
 

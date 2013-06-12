@@ -13,7 +13,7 @@ describe("A participant mapper", function() {
         googleParticipants = helper.getGoogleParticipants('Bob,Fred');
         fakeHangout = {
             setStatus:  jasmine.createSpy('setStatus'),
-            getStatus:  jasmine.createSpy('getStatus').andReturn('listener'),
+            getStatus:  jasmine.createSpy('getStatus').andReturn('speaker')
         };        
     });
     
@@ -28,7 +28,7 @@ describe("A participant mapper", function() {
         //Assert        
         expect(participant.getId()).toEqual('1');
         expect(participant.getName()).toEqual('Bob');
-        expect(participant.getStatus()).toEqual('listener');
+        expect(participant.getStatus()).toEqual('speaker');
     });
 
 });
