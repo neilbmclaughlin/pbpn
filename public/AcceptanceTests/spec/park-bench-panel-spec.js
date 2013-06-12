@@ -48,8 +48,8 @@ describe("A Park Bench Panel", function () {
       expect(fakeHangoutWrapper.getParticipants.callCount).toEqual(1);
     });
     it("any pre-existing saved status for the local participant should be cleared", function () {
-      expect(fakeHangoutWrapper.relinquishSpeakingPlace.callCount).toEqual(3);
-      expect(fakeHangoutWrapper.relinquishSpeakingPlace.calls[0].args[0]).toEqual('1');
+      expect(fakeHangoutWrapper.relinquishSpeakingPlace.callCount).toEqual(1);
+      expect(fakeHangoutWrapper.relinquishSpeakingPlace.calls[0].args[0]).toEqual('2');
     });
     it("then the renderer should have been instructed to add all participants", function () {
       expect(fakeRenderer.joinEventHandler.callCount).toEqual(3);

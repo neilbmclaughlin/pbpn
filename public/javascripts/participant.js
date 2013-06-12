@@ -64,14 +64,15 @@ this.participant = function(spec) {
       h(that);
     });
 
-
     if (that.getStatus() != 'listener') {
       relinquishSpeakingPlace();
     }
   };
 
   that.join = function() {
-    relinquishSpeakingPlace();
+    if (that.isLocal()) {
+      relinquishSpeakingPlace();
+    }
     $.each(joinEventHandlers, function (i, h) {
       h(that);
     });
