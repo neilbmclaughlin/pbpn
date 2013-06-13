@@ -20,7 +20,8 @@ describe("A hangout wrapper", function () {
     participantsJoinedHandler,
     participantsLeftHandler,
     statusChangedHandler,
-    googleParticipants;
+    googleParticipants,
+    SPEAKER_QUEUE_SIZE = 3;
 
   beforeEach(function () {
 
@@ -55,7 +56,7 @@ describe("A hangout wrapper", function () {
       getLocalParticipant: jasmine.createSpy('getLocalParticipant').andReturn(googleParticipants[0])
     };
 
-    wrapper = hangoutWrapper({ hangout: fakeGapi });
+    wrapper = hangoutWrapper({ hangout: fakeGapi }, SPEAKER_QUEUE_SIZE);
   });
 
   describe("when participants join", function () {

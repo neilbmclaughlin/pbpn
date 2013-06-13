@@ -1,4 +1,4 @@
-this.hangoutWrapper = function(gapi) {
+this.hangoutWrapper = function(gapi, speakerQueueSize) {
 
   var that = {};
 
@@ -36,8 +36,7 @@ this.hangoutWrapper = function(gapi) {
       .map(function(s) { return s.key });
 
     var speakerQueuePosition = $.inArray(participantId, orderedSpeakerList) + 1;
-    const SPEAKER_QUEUE_SIZE = 3;
-    return ( speakerQueuePosition < 1 ? 'listener' : ( speakerQueuePosition <= SPEAKER_QUEUE_SIZE ?  'speaker' : 'waiting') );
+    return ( speakerQueuePosition < 1 ? 'listener' : ( speakerQueuePosition <= speakerQueueSize ?  'speaker' : 'waiting') );
   };
   that.requestSpeakingPlace = function(participantId) {
     gapi.hangout.data.setValue(participantId, 'RequestToSpeak');
