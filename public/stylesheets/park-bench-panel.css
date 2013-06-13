@@ -21,7 +21,7 @@ ul {
 ul li {
   font-size: 1em;
   border: 1px solid #00f;
-  margin: 0.2em 0.2em;
+  margin: 0.15em;
   border-radius: 0.5em;
   text-align: center;
 }
@@ -50,7 +50,7 @@ ul li:active {
 input[type='button'] {
   font-size: 0.8em;
   color: #123d54;
-  padding: 5px 10px;
+  padding: 3px 5px;
   background: -moz-linear-gradient(top, #afd9fa 0%, #588fad);
   background: -webkit-gradient(linear, left top, left bottom, from(#afd9fa), to(#588fad));
   -moz-border-radius: 6px;
