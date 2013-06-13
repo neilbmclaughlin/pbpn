@@ -17,10 +17,10 @@ ul {
 }
 ul li {
   border: 1px solid #00f;
-  margin: 0.2em;
-  border-radius: 5em;
+  margin: 0.2em 0.2em;
+  border-radius: 0.5em;
   text-align: center;
-  padding: 0.2em 0.2em;
+  width: 80%;
 }
 ul li.localParticipant {
   font-weight: bold;

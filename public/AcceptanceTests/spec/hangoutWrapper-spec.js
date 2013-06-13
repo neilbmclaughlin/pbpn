@@ -48,7 +48,8 @@ describe("A hangout wrapper", function () {
       data: {
         onStateChanged: { add: jasmine.createSpy('onStateChanged') },
         setValue: jasmine.createSpy('setValue'),
-        getValue: jasmine.createSpy('getValue').andReturn('listener')
+        getValue: jasmine.createSpy('getValue').andReturn('listener'),
+        getStateMetadata: jasmine.createSpy('getStateMetadata')
 
       },
       getLocalParticipant: jasmine.createSpy('getLocalParticipant').andReturn(googleParticipants[0])
@@ -128,7 +129,6 @@ describe("A hangout wrapper", function () {
 
   });
 
-
   describe("when a hangout starts", function () {
 
     describe("if the gapi is ready", function () {
@@ -168,6 +168,68 @@ describe("A hangout wrapper", function () {
         expect(fakeGapi.onApiReady.add).toHaveBeenCalledWith(any(Function));
       });
     });
+  });
+
+  describe("when a participant queries it's status", function(){
+
+    beforeEach(function() {
+      //Arrange
+      fakeGapi.data.getStateMetadata.andReturn({
+        '1' : { key : '1', value : 'RequestToSpeak', timediff : 0, timestamp : 100 },
+        '2' : { key : '2', value : 'RequestToSpeak', timediff : 0, timestamp : 300 },
+        '3' : { key : '3', value : 'RequestToSpeak', timediff : 0, timestamp : 200 },
+        '4' : { key : '4', value : 'RequestToSpeak', timediff : 0, timestamp : 400 }
+      });
+
+    });
+
+    describe("and the participant is in the speaker queue (ordered by how long participants have been in the queue with oldest at the top)", function() {
+
+      describe("and the participant is in the top 3 of the queue", function() {
+
+        it("then the participant status should be 'speaker'", function() {
+
+          //Act
+          var status = wrapper.getStatus('1');
+
+          //Assert
+          expect(status).toEqual('speaker')
+
+        });
+
+      });
+
+      describe("and the participant is outside the top 3 of the queue", function() {
+
+        it("then the participant status should be 'waiting'", function() {
+
+          //Act
+          var status = wrapper.getStatus('4');
+
+          //Assert
+          expect(status).toEqual('waiting')
+
+        });
+
+      });
+
+    });
+
+    describe("the participant is not in the speaker queue", function() {
+
+      it("then the participant status should be 'waiting'", function() {
+
+        //Act
+        var status = wrapper.getStatus('5');
+
+        //Assert
+        expect(status).toEqual('listener')
+
+      });
+
+    });
+
+
   });
 
 

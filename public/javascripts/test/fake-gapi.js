@@ -64,6 +64,9 @@ var getFakeGapi = function() {
       getValue: function(key) {
         return speakerQueue[key];
       },
+      getStateMetadata: function() {
+        return speakerQueue ;
+      },
       setValue: function(key, value) {
         speakerQueue[key] = { key : key, value : value, timediff : 0, timestamp : new Date().getTime() };
         stateChangedHandlerSpy( { metadata: speakerQueue } );

@@ -28,7 +28,16 @@ this.hangoutWrapper = function(gapi) {
     return $.map(gapi.hangout.getParticipants(), participantMapper(that));
   };
   that.getStatus = function(participantId) {
-    return gapi.hangout.data.getValue(participantId) ? 'speaker' : 'listener';
+    var metadata = gapi.hangout.data.getStateMetadata() || {};
+
+    var orderedSpeakerList = $
+      .map(metadata, function(s) {return s })
+      .sort(function(s1,s2) { return s1.timestamp - s2.timestamp } )
+      .map(function(s) { return s.key });
+
+    var speakerQueuePosition = $.inArray(participantId, orderedSpeakerList) + 1;
+    const SPEAKER_QUEUE_SIZE = 3;
+    return ( speakerQueuePosition < 1 ? 'listener' : ( speakerQueuePosition <= SPEAKER_QUEUE_SIZE ?  'speaker' : 'waiting') );
   };
   that.requestSpeakingPlace = function(participantId) {
     gapi.hangout.data.setValue(participantId, 'RequestToSpeak');
