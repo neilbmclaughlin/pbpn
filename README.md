@@ -1,4 +1,4 @@
-![Alt text](https://developers.google.com/+/images/hangouts-logo.png "Optional title")
+![park bench panel - a google+ hangout app](https://developers.google.com/+/images/hangouts-logo.png)
 
 Park Bench Panel
 ================
@@ -9,9 +9,9 @@ Public Links
 ============
 
 <a href="https://plus.google.com/hangouts/_?gid=727799527310" style="text-decoration:none;">
-  <img src="https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-20x86-normal.png"
+  <img src="https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-24x100-normal.png"
     alt="Start a Hangout"
-    style="border:0;width:86px;height:20px;"/>
+    style="border:0;width:100px;height:24px;"/>
 </a>
 
 Developer Links
