@@ -19,7 +19,7 @@ ul li {
   margin: 0.2em 0.2em;
   border-radius: 0.5em;
   text-align: center;
-  width: 80%;
+  width: 90%;
 }
 ul li.localParticipant {
   color: #000;
@@ -37,6 +37,11 @@ ul li:active {
 }
 #speakerList li {
   background: #008000;
+}
+#buttons {
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
 }
 input[type='button'] {
   font-size: 0.9em;
