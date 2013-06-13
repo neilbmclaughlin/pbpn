@@ -1,6 +1,6 @@
 body 
     font-size:100%
-    font-family: 'Arial'
+    font-family: 'Trebuchet MS'
 
 
 h1  
@@ -10,12 +10,11 @@ h1
     padding-left: .5em
     margin: .5em
     color: white
-    font-size:1.1em
+    font-size:1.5em
 
 
 ul
     list-style-type:none
-    /*width:15em;*/
 
 
 ul li
@@ -26,9 +25,8 @@ ul li
     width: 80%
 
 
-ul li.localParticipant 
-    font-weight:bold
-    font-style:italic
+ul li.localParticipant
+    color: black
 
 
 ul li:hover, ul li:focus, ul li:active
@@ -41,10 +39,33 @@ ul li:hover, ul li:focus, ul li:active
 #speakerList li
   background:green
 
-input[type='button'] 
-    background:LightBlue; 
-    border:1px solid blue; 
-    margin:.2em; 
-    border-radius:7px; 
-    text-align:center; 
-    padding:.2em 4em
+
+input[type='button']  {
+    font-size:0.9em
+	color: #123d54;
+	padding: 5px 10px;
+	background: -moz-linear-gradient(
+		top,
+		#afd9fa 0%,
+		#588fad);
+	background: -webkit-gradient(
+		linear, left top, left bottom,
+		from(#afd9fa),
+		to(#588fad));
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #003366;
+	-moz-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(255,255,255,1);
+	-webkit-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(255,255,255,1);
+	box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(255,255,255,1);
+	text-shadow:
+		0px -1px 0px rgba(000,000,000,0.7),
+		0px 1px 0px rgba(255,255,255,0.3);
+}
