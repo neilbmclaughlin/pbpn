@@ -1,14 +1,18 @@
-park-bench-panel
+![Alt text](https://developers.google.com/+/images/hangouts-logo.png "Optional title")
+
+Park Bench Panel
 ================
 
-Google hangout park bench panel app
-
-====
+pbpn - a google+ hangout park bench panel app written using nodejs + express
 
 Public Links
 ============
 
-* [Start page](https://plus.google.com/hangouts/_?gid=727799527310)
+<a href="https://plus.google.com/hangouts/_?gid=727799527310" style="text-decoration:none;">
+  <img src="https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-20x86-normal.png"
+    alt="Start a Hangout"
+    style="border:0;width:86px;height:20px;"/>
+</a>
 
 Developer Links
 ============
@@ -24,7 +28,8 @@ jasmine Tests
 Notes
 =====
 
-useful commands:
-jasmine-node --autotest public/AcceptanceTests/spec
-foreman start -f Procfile.dev (Procfile.dev uses nodemon rather than node)
-node --debug-brk node_modules/jasmine-node/lib/jasmine-node/cli.js public/AcceptanceTests/spec + node-inspector for debugging
+Useful commands:
+
+* jasmine-node --autotest public/AcceptanceTests/spec
+* foreman start -f Procfile.dev (Procfile.dev uses nodemon rather than node)
+* node --debug-brk node_modules/jasmine-node/lib/jasmine-node/cli.js public/AcceptanceTests/spec + node-inspector for debugging
