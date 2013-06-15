@@ -83,9 +83,11 @@ var getFakeGapi = function() {
       return fakeLocalParticipant;
     },
     participantSelectChanged : function() {
+      $('#' + fakeLocalParticipant.person.id).removeClass('localParticipant')
       fakeLocalParticipant = jQuery.grep(participants, function(p){
         return (p.person.id == $('#localParticipantSelect').val() );
       })[0];
+      $('#' + fakeLocalParticipant.person.id).addClass('localParticipant')
     },
     addTestParticipant : function() {
       var id = participants.length + 1;
@@ -104,6 +106,7 @@ var getFakeGapi = function() {
         return (p.person.id != fakeLocalParticipant.id );
       });
       fakeLocalParticipant = participants[0];
+      $('#' + fakeLocalParticipant.person.id).addClass('localParticipant')
     },
     getSpeakerQueue : function() {
       return speakerQueue;
