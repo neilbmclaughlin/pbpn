@@ -1,6 +1,6 @@
-this.testingRenderer = function() {
+this.testingRenderer = function(renderer) {
 
-  var that = renderer();
+  var that = renderer;
 
   var super_joinEventHandler = that.joinEventHandler;
   var super_statusChangedEventHandler = that.statusChangedEventHandler;
@@ -27,8 +27,6 @@ this.testingRenderer = function() {
     super_leaveEventHandler(participant);
     $('#localParticipantSelect option[value=' + participant.getId() + ']').remove();
   };
-
-
 
   return that;
 };

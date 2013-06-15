@@ -4,7 +4,7 @@ block append scripts
   script(src='#{url}/../javascripts/test/fake-gapi.js')
   script(src='#{url}/../javascripts/test/testing-renderer.js')
   script(type='text/javascript')
-    var renderer = testingRenderer();
+    var renderer = testingRenderer(renderer());
 
 block append body
   hr
