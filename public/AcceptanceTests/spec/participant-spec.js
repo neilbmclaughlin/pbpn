@@ -1,7 +1,3 @@
-$ = require('jquery');
-
-participant = require('../../javascripts/participant.js').participant;
-
 describe("A participant", function () {
 
   it("should be flagged as local or not local", function () {

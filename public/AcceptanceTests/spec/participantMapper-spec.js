@@ -1,10 +1,3 @@
-$ = require('jquery');;
-
-helper = require('./park-bench-panel-helper.js');
-participant = require('../../javascripts/participant.js').participant;
-participantMapper = require('../../javascripts/participantMapper.js').participantMapper;
-
-
 describe("A participant mapper", function() {
     
     var googleParticipants, fakeHangout;

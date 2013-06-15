@@ -1,11 +1,3 @@
-$ = require('jquery');
-
-helper = require('./park-bench-panel-helper.js');
-participant = require('../../javascripts/participant.js').participant;
-participantMapper = require('../../javascripts/participantMapper.js').participantMapper;
-hangoutWrapper = require('../../javascripts/hangoutWrapper.js').hangoutWrapper;
-
-
 describe("A hangout wrapper", function () {
 
   var
@@ -139,10 +131,12 @@ describe("A hangout wrapper", function () {
       });
 
       it("then the event handler for handling new participants should be wired in", function () {
-        expect(fakeGapi.onParticipantsAdded.add).toHaveBeenCalledWith(any(Function));
+        expect(fakeGapi.onParticipantsAdded.add).toHaveBeenCalled();
+        expect(typeof(fakeGapi.onParticipantsAdded.add.calls[0].args[0])).toEqual('function')
       });
       it("then the event handler for handling participants leaving should be wired in", function () {
-        expect(fakeGapi.onParticipantsRemoved.add).toHaveBeenCalledWith(any(Function));
+        expect(fakeGapi.onParticipantsRemoved.add).toHaveBeenCalled();
+        expect(typeof(fakeGapi.onParticipantsRemoved.add.calls[0].args[0])).toEqual('function')
       });
       it("then the event handler for handling changes to participant state should be wired in", function () {
         expect(fakeGapi.data.onStateChanged.add).toHaveBeenCalledWith(statusChangedHandler)
@@ -156,7 +150,7 @@ describe("A hangout wrapper", function () {
     describe("if the gapi is not ready", function () {
 
       beforeEach(function () {
-        var googleParticipants = getGoogleParticipants('Bob');
+        var googleParticipants = helper.getGoogleParticipants('Bob');
         fakeGapi = {
           isApiReady: jasmine.createSpy('isApiReady').andReturn(false),
           onApiReady: { add: jasmine.createSpy('onApiReady.add') },
@@ -166,7 +160,8 @@ describe("A hangout wrapper", function () {
         wrapper.start(newParticipantsJoinedHandler, stateChangedHandler, init);
       });
       it("then the setup should wait until it is ready", function () {
-        expect(fakeGapi.onApiReady.add).toHaveBeenCalledWith(any(Function));
+        expect(fakeGapi.onApiReady.add).toHaveBeenCalled();
+        expect(typeof(fakeGapi.onApiReady.add.calls[0].args[0])).toEqual('function')
       });
     });
   });

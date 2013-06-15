@@ -1,11 +1,3 @@
-$ = require('jquery');
-
-helper = require('./park-bench-panel-helper.js');
-participant = require('../../javascripts/participant.js').participant;
-participantMapper = require('../../javascripts/participantMapper.js').participantMapper;
-parkBenchPanel = require('../../javascripts/park-bench-panel.js').parkBenchPanel;
-
-
 describe("A Park Bench Panel", function () {
 
   var fakeRenderer, fakeHangoutWrapper, pbp;
@@ -23,7 +15,7 @@ describe("A Park Bench Panel", function () {
 
     beforeEach(function () {
 
-      participants = getPbpParticipants({
+      participants = helper.getPbpParticipants({
         nameList: 'Bob,Fred,Bill',
         localParticipantId: localParticipantId,
         localParticipantStatus: undefined,
@@ -62,7 +54,7 @@ describe("A Park Bench Panel", function () {
 
     beforeEach(function () {
 
-      participants = getPbpParticipants({
+      participants = helper.getPbpParticipants({
         nameList: 'Bob,Fred,Bill',
         status: 'listener',
         localParticipantId: localParticipantId,
@@ -103,7 +95,7 @@ describe("A Park Bench Panel", function () {
 
       //Arrange
       joinFake = jasmine.createSpy('joinFake');
-      var participants = getPbpParticipants({
+      var participants = helper.getPbpParticipants({
         nameList: 'Bob,Fred,Bill',
         fakeHangoutWrapper: fakeHangoutWrapper
       });
@@ -150,7 +142,7 @@ describe("A Park Bench Panel", function () {
       //Arrange
       leaveFake = jasmine.createSpy('joinFake');
 
-      participants = getPbpParticipants({
+      participants = helper.getPbpParticipants({
         nameList: 'Bob,Fred,Bill',
         status: 'listener',
         fakeHangoutWrapper: fakeHangoutWrapper
