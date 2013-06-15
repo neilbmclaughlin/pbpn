@@ -14,7 +14,7 @@ this.renderer = function() {
   var remove = function(participant, oldStatus) {
     var listName = '#' + oldStatus + 'List';
     var listItem = $(listName + ' li:contains("' + participant.getName() + '")');
-    listItem.slideUp(500, 'linear', function () { $(this).remove();});
+    listItem.slideUp(50, 'linear', function () { $(this).remove();});
   };
 
   var move = function(participant, oldStatus) {
