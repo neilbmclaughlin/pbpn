@@ -12,7 +12,7 @@ block append body
     label(for='localParticipantSelect') Current local participant
     select#localParticipantSelect(onchange='gapi.hangout.participantSelectChanged();')
     label(for='microphoneMuted') Local participant microphone muted
-    input#microphoneMuted(type='checkbox', onclick='return false', checked='checked')
+    input#microphoneMuted(type='checkbox', onclick='return false')
     input#btnRemoveParticipant.button(type='button', value='Remove', onclick='gapi.hangout.removeTestParticipant()')
   div
     label(for='displayName') Name

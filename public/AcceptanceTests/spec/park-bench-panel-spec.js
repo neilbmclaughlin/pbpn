@@ -4,7 +4,7 @@ describe("A Park Bench Panel", function () {
 
   beforeEach(function () {
 
-    fakeHangoutWrapper = jasmine.createSpyObj('repo', ['statusChangedEventHandler', 'getLocalParticipant', 'getParticipants', 'getStatus', 'requestSpeakingPlace', 'relinquishSpeakingPlace']);
+    fakeHangoutWrapper = jasmine.createSpyObj('hangoutWrapper', ['statusChangedEventHandler', 'getLocalParticipant', 'getParticipants', 'getStatus', 'requestSpeakingPlace', 'relinquishSpeakingPlace', 'mute']);
     fakeRenderer = jasmine.createSpyObj('renderer', ['statusChangedEventHandler', 'joinEventHandler', 'add', 'move', 'remove']);
   });
 
@@ -42,6 +42,9 @@ describe("A Park Bench Panel", function () {
     it("any pre-existing saved status for the local participant should be cleared", function () {
       expect(fakeHangoutWrapper.relinquishSpeakingPlace.callCount).toEqual(1);
       expect(fakeHangoutWrapper.relinquishSpeakingPlace.calls[0].args[0]).toEqual('2');
+    });
+    it("the local participant microphone should be muted", function () {
+      expect(fakeHangoutWrapper.mute).toHaveBeenCalledWith(true);
     });
     it("then the renderer should have been instructed to add all participants", function () {
       expect(fakeRenderer.joinEventHandler.callCount).toEqual(3);

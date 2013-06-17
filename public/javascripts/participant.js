@@ -54,7 +54,7 @@ this.participant = function(spec) {
         });
       });
       if(that.isLocal()) {
-        spec.chair.mute(getMuteStatus(status));
+        setMicrophoneMute();
       }
     }
   };
@@ -75,9 +75,14 @@ this.participant = function(spec) {
     }
   };
 
+  function setMicrophoneMute() {
+    spec.chair.mute(getMuteStatus(status));
+  }
+
   that.join = function() {
     if (that.isLocal()) {
       relinquishSpeakingPlace();
+      setMicrophoneMute();
     }
     $.each(joinEventHandlers, function (i, h) {
       h(that);
