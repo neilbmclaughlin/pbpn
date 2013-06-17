@@ -13,7 +13,7 @@ describe("A list renderer", function () {
     $("#waitingList").empty();
     $("#listenerList").empty();
 
-    fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus', 'getLocalParticipant']);
+    fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['getStatus', 'getLocalParticipant', 'mute']);
     fakeHangoutWrapper.getLocalParticipant.andReturn({ getId: function () {
       return 1
     } });

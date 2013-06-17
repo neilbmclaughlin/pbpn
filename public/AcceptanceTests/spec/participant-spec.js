@@ -28,10 +28,13 @@ describe("A participant", function () {
   it("should notify subscribers of status changes", function () {
 
     //arrange
+    var fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['mute', 'getLocalParticipant']);
     var p1 = participant({
       name: 'Bob',
-      id: 1
+      id: 1,
+      chair: fakeHangoutWrapper
     });
+    fakeHangoutWrapper.getLocalParticipant.andReturn(p1);
     var statusChangedHandler1 = jasmine.createSpy('statusChangedHandler1');
     var statusChangedHandler2 = jasmine.createSpy('statusChangedHandler2');
     p1.addOnStatusChangedHandlers([statusChangedHandler1, statusChangedHandler2]);
@@ -49,6 +52,62 @@ describe("A participant", function () {
       participant: p1,
       lastStatus: 'listener'
     });
+  });
+
+  describe("When a participant changes status", function() {
+
+    var p1, p2, leaveHandler, fakeHangoutWrapper;
+
+    beforeEach(function() {
+      //arrange
+      fakeHangoutWrapper = jasmine.createSpyObj('fakeHangoutWrapper', ['mute', 'getLocalParticipant']);
+
+      p1 = participant({
+        name: 'Bob',
+        id: 1,
+        status: 'undefined',
+        chair: fakeHangoutWrapper
+      });
+      p2 = participant({
+        name: 'Fred',
+        status: 'undefined',
+        id: 2,
+        chair: fakeHangoutWrapper
+      });
+      fakeHangoutWrapper.getLocalParticipant.andReturn(p1);
+
+
+    });
+
+    describe("and the participant is local", function() {
+
+      it("should mute the participant microphone if the participant is a listener", function() {
+        p1.setStatus('listener')
+        expect(fakeHangoutWrapper.mute).toHaveBeenCalledWith(true);
+      });
+
+      it("should mute the participant microphone if the participant is waiting to speak", function() {
+        p1.setStatus('waiting')
+        expect(fakeHangoutWrapper.mute).toHaveBeenCalledWith(true);
+      });
+
+      it("should un-mute the participant microphone if the participant is a speaker", function() {
+        p1.setStatus('speaker')
+        expect(fakeHangoutWrapper.mute).toHaveBeenCalledWith(false);
+      });
+
+    });
+
+    describe("and the participant is not local", function() {
+
+      it("should not set the status of the local participant microphone", function() {
+        p2.setStatus('listener')
+        expect(fakeHangoutWrapper.mute).not.toHaveBeenCalled();
+      });
+
+    });
+
+
   });
 
   describe("when a participant leaves", function() {

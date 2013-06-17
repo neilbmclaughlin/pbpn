@@ -10,27 +10,32 @@ var getFakeGapi = function() {
         person: {
           id: 1,
           displayName: 'Bob'
-        }
+        },
+        mute: true
       }, {
         person: {
           id: 2,
           displayName: 'Fred'
-        }
+        },
+        mute: true
       }, {
         person: {
           id: 3,
           displayName: 'Bill'
-        }
+        },
+        mute: true
       }, {
         person: {
           id: 4,
           displayName: 'Joe'
-        }
+        },
+        mute: true
       }, {
         person: {
           id: 5,
           displayName: 'Alf'
-        }
+        },
+        mute: true
       }
     ];
   };
@@ -76,6 +81,12 @@ var getFakeGapi = function() {
         stateChangedHandlerSpy( { metadata: speakerQueue } );
       }
     },
+    av: {
+      setMicrophoneMute: function(mute) {
+        fakeLocalParticipant.mute = mute;
+        $('#microphoneMuted').prop('checked', mute);
+      }
+    },
     getLocalParticipant : function() {
       // var localParticipant = jQuery.grep(participants, function(p){
       //     return (p.person.displayName == $('#localParticipantSelect').val() );
@@ -87,6 +98,7 @@ var getFakeGapi = function() {
       fakeLocalParticipant = jQuery.grep(participants, function(p){
         return (p.person.id == $('#localParticipantSelect').val() );
       })[0];
+      $('#microphoneMuted').prop('checked', fakeLocalParticipant.mute);
       $('#' + fakeLocalParticipant.person.id).addClass('localParticipant')
     },
     addTestParticipant : function() {

@@ -10,6 +10,11 @@ this.participant = function(spec) {
     spec.chair.relinquishSpeakingPlace(spec.id);
   };
 
+  var getMuteStatus = function(status) {
+    return status != 'speaker';
+  };
+
+
   if (spec.onStatusChangedEventHandlers !== undefined) {
     statusChangedEventHandlers.push.apply(statusChangedEventHandlers, spec.statusChangedEventHandlers);
   }
@@ -34,9 +39,11 @@ this.participant = function(spec) {
     return status;
   };
 
+  that.isLocal = function() {
+    return spec.chair.getLocalParticipant().getId() == spec.id;
+  };
 
   that.setStatus = function(newStatus) {
-
     if (status != newStatus) {
       var lastStatus = status;
       status = newStatus;
@@ -46,11 +53,10 @@ this.participant = function(spec) {
           lastStatus: lastStatus
         });
       });
+      if(that.isLocal()) {
+        spec.chair.mute(getMuteStatus(status));
+      }
     }
-  };
-
-  that.isLocal = function() {
-    return spec.chair.getLocalParticipant().getId() == spec.id;
   };
 
   that.requestSpeakingPlace = function() {

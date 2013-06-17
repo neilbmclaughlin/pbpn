@@ -45,7 +45,10 @@ describe("A hangout wrapper", function () {
         getStateMetadata: jasmine.createSpy('getStateMetadata')
 
       },
-      getLocalParticipant: jasmine.createSpy('getLocalParticipant').andReturn(googleParticipants[0])
+      getLocalParticipant: jasmine.createSpy('getLocalParticipant').andReturn(googleParticipants[0]),
+      av : {
+        setMicrophoneMute: jasmine.createSpy('setMicrophoneMute')
+      }
     };
 
     wrapper = hangoutWrapper({ hangout: fakeGapi }, SPEAKER_QUEUE_SIZE);
@@ -91,6 +94,20 @@ describe("A hangout wrapper", function () {
       expect(participantsLeftHandler.calls[0].args[0][1].getName()).toEqual('Fred');
 
     });
+  });
+
+  describe("when a request is made to mute a participant", function() {
+
+    it("should pass the request to Gapi", function() {
+
+      //Arrange
+
+      //Act
+      wrapper.mute(true);
+
+      //Assert
+      expect(fakeGapi.av.setMicrophoneMute).toHaveBeenCalledWith(true);
+    })
   });
 
   describe("when the speaker queue changes", function () {

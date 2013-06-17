@@ -45,6 +45,10 @@ this.hangoutWrapper = function(gapi, speakerQueueSize) {
     gapi.hangout.data.clearValue(participantId);
   };
 
+  that.mute = function(mute) {
+    gapi.hangout.av.setMicrophoneMute(mute)
+  };
+
   var setup = function(participantsJoinedHandler, participantsLeftHandler, speakerQueueChangedHandler, init) {
     gapi.hangout.onParticipantsAdded.add(getWrappedHandler(participantsJoinedHandler, participantMapper(that), 'addedParticipants'));
     gapi.hangout.onParticipantsRemoved.add(getWrappedHandler(participantsLeftHandler, participantMapper(that), 'removedParticipants'));
