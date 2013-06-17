@@ -1,0 +1,4 @@
+<Module>
+    <ModulePrefs title="Agile Yorkshire Twitter Mentions" />
+    <Content type="url" href="https://s3-eu-west-1.amazonaws.com/neilbmclaughlin/agileyorkshire/twitter.html" />
+</Module>
