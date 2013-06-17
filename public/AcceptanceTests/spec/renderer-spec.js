@@ -21,6 +21,13 @@ describe("A list renderer", function () {
 
   });
 
+  afterEach(function () {
+    $("#speakerList").empty();
+    $("#waitingList").empty();
+    $("#listenerList").empty();
+  });
+
+
   it("Can respond to notification of a change of status for a participant", function () {
 
     fakeHangoutWrapper.getStatus.andReturn('speaker');
