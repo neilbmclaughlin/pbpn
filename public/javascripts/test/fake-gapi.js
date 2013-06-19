@@ -115,7 +115,7 @@ var getFakeGapi = function(testingRenderer) {
     removeTestParticipant : function() {
       participantRemovedEventHandlerSpy( { removedParticipants : [fakeLocalParticipant] });
       participants = jQuery.grep(participants, function(p){
-        return (p.person.id != fakeLocalParticipant.id );
+        return (p.person.id != fakeLocalParticipant.person.id );
       });
       fakeLocalParticipant = participants[0];
       testingRenderer.setLocalParticipant(fakeLocalParticipant);
