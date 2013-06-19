@@ -5,6 +5,7 @@ block append scripts
   script(src='#{url}/../javascripts/test/testing-renderer.js')
   script(type='text/javascript')
     var renderer = testingRenderer(renderer());
+    gapi = { hangout : getFakeGapi(renderer) };
 
 block append body
   hr

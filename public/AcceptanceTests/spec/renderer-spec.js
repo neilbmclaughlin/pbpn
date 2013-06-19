@@ -32,7 +32,7 @@ describe("A list renderer", function () {
 
     fakeHangoutWrapper.getStatus.andReturn('speaker');
     var p1 = participant({
-      id: 1,
+      id: 2,
       name: 'Bob',
       status: 'speaker',
       chair: fakeHangoutWrapper
@@ -46,14 +46,13 @@ describe("A list renderer", function () {
     //assert
     expect(GetListItems("speakerList").length).toEqual(1);
     expect(GetListItems("speakerList")[0].innerHTML).toEqual("Bob");
-    expect(GetListItems("speakerList")[0].className).toEqual("localParticipant");
 
   });
 
   it("Can respond to notification for a participant leaving", function () {
 
     var p1 = participant({
-      id: 1,
+      id: 2,
       name: 'Bob',
       chair: fakeHangoutWrapper
     });
@@ -70,7 +69,10 @@ describe("A list renderer", function () {
 
   it("Can respond to notification for a participant joining", function () {
     //act
-    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
+    var p1 = participant({
+      id: 2,
+      name: 'Bob',
+      chair: fakeHangoutWrapper });
 
     r.joinEventHandler(p1);
 
@@ -81,27 +83,34 @@ describe("A list renderer", function () {
     expect(GetListItems("listenerList")[0].innerHTML).toEqual("Bob");
   });
 
-  it("The local participant in a list should be identifiable.", function () {
+  describe("The local participant in a list should be identifiable.", function () {
 
-    fakeHangoutWrapper.getStatus.andReturn('listener');
-    var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
-    var p2 = participant({ id: 2, name: 'Fred', chair: fakeHangoutWrapper });
-    //act
-    r.joinEventHandler( p1 );
-    r.joinEventHandler( p2 );
+    beforeEach(function(){
+      fakeHangoutWrapper.getStatus.andReturn('listener');
+      var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
+      var p2 = participant({ id: 2, name: 'Fred', chair: fakeHangoutWrapper });
+      //act
+      r.joinEventHandler( p1 );
+      r.joinEventHandler( p2 );
 
-    //assert
-    expect(GetListItems("listenerList").length).toEqual(2);
-    expect(GetListItems("listenerList")[0].innerHTML).toEqual("Bob");
-    expect(GetListItems("listenerList")[0].className).toEqual("localParticipant");
-    expect(GetListItems("listenerList")[1].innerHTML).toEqual("Fred");
-    expect(GetListItems("listenerList")[1].className).toEqual("");
+      expect(GetListItems("listenerList").length).toEqual(2);
 
+    });
+
+    it("should display the local participant as 'Me'", function() {
+      expect(GetListItems("listenerList")[0].innerHTML).toEqual("Me");
+      expect(GetListItems("listenerList")[1].innerHTML).toEqual("Fred");
+    })
+    it("should set the css class of the local participant", function() {
+      expect(GetListItems("listenerList")[0].className).toEqual("localParticipant");
+      expect(GetListItems("listenerList")[1].className).toEqual("");
+    })
   });
 
   it("After a change in status the local participant in a list should still be identifiable.", function () {
 
     //arrange
+    debugger;
     var p1 = participant({ id: 1, name: 'Bob', chair: fakeHangoutWrapper });
     var p2 = participant({ id: 2, name: 'Fred', chair: fakeHangoutWrapper });
 
@@ -118,7 +127,7 @@ describe("A list renderer", function () {
     expect(GetListItems("listenerList")[0].innerHTML).toEqual("Fred");
     expect(GetListItems("listenerList")[0].className).toEqual("");
     expect(GetListItems("speakerList").length).toEqual(1);
-    expect(GetListItems("speakerList")[0].innerHTML).toEqual("Bob");
+    expect(GetListItems("speakerList")[0].innerHTML).toEqual("Me");
     expect(GetListItems("speakerList")[0].className).toEqual("localParticipant");
 
   });

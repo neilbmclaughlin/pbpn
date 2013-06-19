@@ -8,12 +8,12 @@ this.renderer = function() {
         .addClass(className)
         .attr('id', participant.getId())
         .fadeIn(500)
-        .text(participant.getName()));
+        .text( participant.isLocal() ? 'Me' : participant.getName()));
   };
 
   var remove = function(participant, oldStatus) {
     var listName = '#' + oldStatus + 'List';
-    var listItem = $(listName + ' li:contains("' + participant.getName() + '")');
+    var listItem = $(listName + ' li[id = "' + participant.getId() + '"]');
     listItem.slideUp(50, 'linear', function () { $(this).remove();});
   };
 

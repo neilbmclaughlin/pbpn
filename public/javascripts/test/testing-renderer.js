@@ -22,11 +22,22 @@ this.testingRenderer = function(renderer) {
     super_statusChangedEventHandler(spec);
   };
 
-
   that.leaveEventHandler = function(participant) {
     super_leaveEventHandler(participant);
     $('#localParticipantSelect option[value=' + participant.getId() + ']').remove();
   };
+
+  that.setLocalParticipant = function(p1) {
+    $('#' + p1.person.id).addClass('localParticipant')
+    $('#' + p1.person.id).text( 'Me' );
+  }
+
+  that.switchLocalParticipant = function(p1,p2) {
+    $('#' + p1.person.id).removeClass('localParticipant');
+    $('#' + p1.person.id).text( p1.person.displayName);
+    that.setLocalParticipant(p2);
+  }
+
 
   return that;
 };
