@@ -2,59 +2,6 @@ this.parkBenchPanel = function(hangoutWrapper, renderer) {
 
   var participants = null;
 
-  var getParticipantCounts = function() {
-    var counts = {
-      speaker: 0,
-      waiting: 0,
-      listener: 0
-    };
-    $.each(participants, function(i, p) {
-      counts[p.getStatus()]++;
-    });
-    return counts;
-  };
-
-  var getParticipantByName = function(name) {
-    return $.grep(participants, function(p) {
-      return p.getName() == name;
-    })[0];
-  };
-
-  var getParticipantById = function(id) {
-    return $.grep(participants, function(p) {
-      return p.getId() == id;
-    })[0];
-  };
-
-  var getParticipantsByStatus = function(status) {
-    return $.grep(participants, function(p) {
-      return p.getStatus() == status;
-    });
-  };
-
-  var getRemoteParticipants = function() {
-    return $.grep(participants, function(p) {
-      return p.isLocal() === false;
-    });
-  };
-
-  var setParticipantsStatusChangedEventHandler = function(participants, eventHandlers) {
-    $.each(participants, function(i, p) {
-      p.addOnStatusChangedHandlers(eventHandlers);
-    });
-  };
-
-  var displayRemoteParticipants = function(f) {
-    $.each(getRemoteParticipants(), function(i, p) {
-      f(p);
-    });
-  };
-
-  var displayParticipants = function(f) {
-    $.each(participants, function(i, p) {
-      f(p);
-    });
-  };
 
   var wireUpParticipant = function(p) {
     p.addOnJoinHandlers([renderer.joinEventHandler]);
@@ -96,7 +43,6 @@ this.parkBenchPanel = function(hangoutWrapper, renderer) {
         p.leave();
       });
     },
-
     speakerQueueChangedHandler: function(stateChangedEvent) {
       $.each(participants, function(i, p) {
         var status = hangoutWrapper.getStatus(p.getId());

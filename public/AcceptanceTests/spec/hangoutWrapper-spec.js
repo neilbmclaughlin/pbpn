@@ -242,8 +242,6 @@ describe("A hangout wrapper", function () {
 
     });
 
-
   });
-
 
 });
