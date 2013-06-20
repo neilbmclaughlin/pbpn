@@ -5,8 +5,7 @@ Park Bench Panel
 
 pbpn - a google+ hangout park bench panel app written using nodejs + express
 
-Park bench Panel Format
------------------------
+###Park Bench Panel Format
 
 A park bench panel is a way of structuring a panel discussion such that the audience can participate.
 
@@ -14,8 +13,8 @@ A park bench panel is a way of structuring a panel discussion such that the audi
 * Only those participants with a speaking place can speak but any participant can request to speak.
 * When someone wishes to speak then one of the current speakers needs to give up their speaking place voluntarily.
 
-[More](http://c2.com/cgi/wiki?ParkBenchPanel)
-[See also fishbowl](http://c2.com/cgi/wiki?FishBowl)
+[Park Bench Panel](http://c2.com/cgi/wiki?ParkBenchPanel),
+[Fishbowl](http://c2.com/cgi/wiki?FishBowl)
 
 
 Public Links
