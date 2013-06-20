@@ -5,6 +5,7 @@ $(document).ready(function() {
   $("#helpDialog").dialog( {
       autoOpen: false,
       height: 430,
+      width: 290,
       modal: true
     });
   $( document ).tooltip();
