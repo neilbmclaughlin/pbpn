@@ -16,24 +16,31 @@ h2
     font-size:1.2em
     color: white
 
+h1 input
+    float: right
+    padding-right: 1em
 
-ul
+div#helpDialog ul
+    font-size:0.8em
+    padding: 0
+
+
+ul.participantList
     list-style-type: none
     padding: 0
-    margin-left: 0
 
-ul li
+ul.participantList  li
     font-size:1em
     border:1px solid blue
     margin: .15em
     border-radius:.5em
     text-align:center
 
-ul li.localParticipant
+ul.participantList li.localParticipant
     color: black
 
 
-ul li:hover, ul li:focus, ul li:active
+ul.participantList li:hover, ul.participantList li:focus, ul.participantList li:active
   opacity:.5
 
 #listenerList li
@@ -47,7 +54,6 @@ ul li:hover, ul li:focus, ul li:active
     margin-left:auto;
     margin-right:auto;
     width:70%;
-
 
 input[type='button']  {
     font-size:0.8em

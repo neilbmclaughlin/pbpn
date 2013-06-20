@@ -28,6 +28,7 @@ if ('development' == app.get('env')) {
 
 app.get('/pbp', pbp.pbp);
 app.get('/dummy-pbp', pbp.dummyPbp);
+app.get('/help', pbp.help);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

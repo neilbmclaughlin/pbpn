@@ -19,3 +19,7 @@ exports.pbp = function(req,res,next){
 exports.dummyPbp = function(req,res,next){
   return res.render('pbp-test-page', {url: getBaseUrl(req), speakerQueueSize: getSpeakerQueueSize() } );
 };
+
+exports.help = function(req,res,next){
+  return res.render('help');
+};
