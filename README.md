@@ -42,17 +42,16 @@ Developer Links
 ============
 
 * [Hangouts console](https://code.google.com/apis/console/b/0/#project:727799527310)
-* Test page using fake hangout API
+* Dummy page using fake hangout API
     * [Staging](http://calm-reaches-6125.herokuapp.com/dummy-pbp)
     * [Production](http://damp-tor-3817.herokuapp.com/dummy-pbp)
 
 jasmine Tests
 =============
 
-Run tests
-
-* [Staging](http://calm-reaches-6125.herokuapp.com/AcceptanceTests/SpecRunner.html)
-* [Production](http://damp-tor-3817.herokuapp.com/AcceptanceTests/SpecRunner.html)
+* Run tests
+    * [Staging](http://calm-reaches-6125.herokuapp.com/AcceptanceTests/SpecRunner.html)
+    * [Production](http://damp-tor-3817.herokuapp.com/AcceptanceTests/SpecRunner.html)
 
 Notes
 =====
