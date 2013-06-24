@@ -13,6 +13,7 @@
     "express": "3.2.6",
     "jade": "*",
     "stylus": "*",
-    "jasmine-node": "*"
+    "jasmine-node": "*",
+    "jquery": "*"
   }
 }
