@@ -22,6 +22,9 @@ Public Links
 
 In order to participate in a hangout you will need to have a Google account with Google+ enabled. You will also need a microphone and speakers/headset.
 
+Please feel free to use the hangout app and give me any feedback. In particular I'd like to hear what is the next feature you would like to see. Log feedback/enhancements using [github issues](https://github.com/neilbmclaughlin/pbpn/issues) and the appropriate tag
+
+
 ### Staging
 
 <a href="https://plus.google.com/hangouts/_?gid=906710246586" style="text-decoration:none;">
@@ -53,11 +56,17 @@ jasmine Tests
     * [Staging](http://calm-reaches-6125.herokuapp.com/AcceptanceTests/SpecRunner.html)
     * [Production](http://damp-tor-3817.herokuapp.com/AcceptanceTests/SpecRunner.html)
 
+NodeUpNorth Presentation
+========================
+
+* [Slides](https://docs.google.com/presentation/d/1FQb8rQaRBmAyZL6triQaTikuqaKWJkxxITkmF3Vd8qw/pub?start=false&loop=false&delayms=3000)
+* Blog post to follow very soon
+
 Notes
 =====
 
 Useful commands:
 
-* jasmine-node --autotest public/AcceptanceTests/spec
+* jasmine-node public/AcceptanceTests/nodespec --autotest --watch public --verbose
 * foreman start -f Procfile.dev (Procfile.dev uses nodemon rather than node)
 * node --debug-brk node_modules/jasmine-node/lib/jasmine-node/cli.js public/AcceptanceTests/spec + node-inspector for debugging
