@@ -61,7 +61,7 @@ Developer Section
       </td>
 </table>
 
-###jasmine Tests
+###Jasmine Tests
 
 * Run tests
     * [Staging](http://calm-reaches-6125.herokuapp.com/AcceptanceTests/SpecRunner.html)
