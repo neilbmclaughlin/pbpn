@@ -7,9 +7,9 @@ pbpn - a google+ hangout park bench panel app written using nodejs + express
 
 A park bench panel is a way of structuring a panel discussion such that the audience can participate.
 
-* At any given point there are three speaking places.
+* At any given point there are three speaking places and one empty place.
 * Only those participants with a speaking place can speak but any participant can request to speak.
-* When someone wishes to speak then one of the current speakers needs to give up their speaking place voluntarily.
+* When someone wishes to speak they occupy the empty place. One of the current speakers then needs to give up their speaking place voluntarily.
 
 [Park Bench Panel](http://c2.com/cgi/wiki?ParkBenchPanel),
 [Fishbowl](http://c2.com/cgi/wiki?FishBowl)
