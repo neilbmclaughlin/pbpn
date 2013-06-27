@@ -3,7 +3,7 @@ Park Bench Panel
 
 pbpn - a google+ hangout park bench panel app written using nodejs + express
 
-###Park Bench Panel Format
+###Overview
 
 A park bench panel is a way of structuring a panel discussion such that the audience can participate.
 
@@ -26,8 +26,15 @@ In order to participate in a hangout you will need to have a Google account with
 
 Please feel free to use the hangout app and give me any feedback. In particular I'd like to hear what is the next feature you would like to see. Log feedback/enhancements using [github issues](https://github.com/neilbmclaughlin/pbpn/issues) and the appropriate tag or simply tweet your feedback to [@neilbmclaughlin](https://twitter.com/neilbmclaughlin)
 
-Developer Links
+###NodeUpNorth Presentation
+
+* [Slides](https://docs.google.com/presentation/d/1FQb8rQaRBmAyZL6triQaTikuqaKWJkxxITkmF3Vd8qw/pub?start=false&loop=false&delayms=3000)
+* Blog post to follow very soon
+
+Developer Section
 ===============
+
+###Links
 
 * [Hangouts console](https://code.google.com/apis/console/b/0/#project:727799527310)
 * Dummy page using fake hangout API
@@ -54,23 +61,13 @@ Developer Links
       </td>
 </table>
 
-jasmine Tests
-=============
+###jasmine Tests
 
 * Run tests
     * [Staging](http://calm-reaches-6125.herokuapp.com/AcceptanceTests/SpecRunner.html)
     * [Production](http://damp-tor-3817.herokuapp.com/AcceptanceTests/SpecRunner.html)
 
-NodeUpNorth Presentation
-========================
-
-* [Slides](https://docs.google.com/presentation/d/1FQb8rQaRBmAyZL6triQaTikuqaKWJkxxITkmF3Vd8qw/pub?start=false&loop=false&delayms=3000)
-* Blog post to follow very soon
-
-Notes
-=====
-
-Useful commands:
+###Useful commands
 
 * jasmine-node public/AcceptanceTests/nodespec --autotest --watch public --verbose
 * foreman start -f Procfile.dev (Procfile.dev uses nodemon rather than node)
