@@ -1,7 +1,9 @@
 Park Bench Panel
 ================
 
-pbpn - a google+ hangout park bench panel app written using nodejs + express
+pbpn - a google+ hangout park bench panel app written using nodejs + express.
+
+[Try it out](#try-it-out)
 
 ###Overview
 
