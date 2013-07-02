@@ -24,7 +24,9 @@ A park bench panel is a way of structuring a panel discussion such that the audi
 
 In order to participate in a hangout you will need to have a Google account with Google+ enabled. You will also need a microphone and speakers/headset.
 
-Please feel free to use the hangout app and give me any feedback. In particular I'd like to hear what is the next feature you would like to see. Log feedback/enhancements using [github issues](https://github.com/neilbmclaughlin/pbpn/issues) and the appropriate tag or simply tweet your feedback to [@neilbmclaughlin](https://twitter.com/neilbmclaughlin)
+This is a very early but fully functional version. At the moment there is no limit to the number of 'empty places' - all requests to speak go in the waitlist.
+
+Please feel free to use the hangout app and give me any feedback. In particular I'd like to hear if you feel there is value in the app and, if so, what is the next feature you would like to see. Log feedback/enhancements using [github issues](https://github.com/neilbmclaughlin/pbpn/issues) and the appropriate tag or simply tweet your feedback to [@neilbmclaughlin](https://twitter.com/neilbmclaughlin)
 
 ###NodeUpNorth Presentation
 
