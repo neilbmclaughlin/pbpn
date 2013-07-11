@@ -76,7 +76,7 @@ Developer Section
 * jasmine-node public/AcceptanceTests/nodespec --autotest --watch public --verbose
 * foreman start -f Procfile.dev (Procfile.dev uses nodemon rather than node)
 * node --debug-brk node_modules/jasmine-node/lib/jasmine-node/cli.js public/AcceptanceTests/spec + node-inspector for debugging
-* 
+
 ###Next steps
 
 * WebRTC
