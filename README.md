@@ -80,5 +80,7 @@ Developer Section
 ###Next steps
 
 * WebRTC
-    * (http://www.webrtc.org/)
+    * http://www.webrtc.org/
     * [IO13 webcast](http://www.youtube.com/watch?v=p2HzZkd2A40)
+* Fabricjs
+    * http://fabricjs.com/
